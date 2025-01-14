@@ -1,0 +1,60 @@
+<?php
+require_once "Connect";
+class User {
+
+    private $username;
+    private $email;
+    private $password;
+    private $role;
+    private $db;
+    
+    private $error = [];
+
+
+    public function __construct($username,$email,$password,$role){
+        $this->username = $username;
+        $this->email = $email;
+        $this->role = $role;
+        $this->password = $password;
+        $connection = new Database();
+        $this->db = $connection->connect();
+    }
+
+    private function emailExists($email){
+       
+            $stm = $this->db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
+            $stm->execute([
+                ':email'=> $email
+            ]);
+            $stm->execute();
+    
+            return $stm->fetchColumn() > 0;
+        
+    }
+    private function validateInput($input){
+        return htmlspecialchars(strip_tags($input));
+    }
+    private function hashPassword($password){
+        return password_hash($password, PASSWORD_DEFAULT);
+    }
+
+
+    public function register(){
+        if($this->emailExists($this->email)){
+            array_push($this->error, "This email already exists");
+        }
+        if(empty($this->username) || strlen($this->username) < 5){
+            array_push($this->error, "The username should be at least 5 characters long");
+        }
+        $stmt = $this->db->prepare("INSERT INTO users(username,email,role,password) VALUES(:username,:email,:role,;password)");
+        $stmt->execute([
+            ":username" => $this->username ,
+            ":email" => $this->email , 
+            ":role" => $this->role ,
+            ":password" => $this->password
+        ]);
+
+        return $this->error;
+    }
+
+}
