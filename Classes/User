@@ -21,7 +21,8 @@ class User {
     }
 
     private function emailExists($email){
-       
+        if(!empty($email)){
+
             $stm = $this->db->prepare("SELECT COUNT(*) FROM users WHERE email = :email");
             $stm->execute([
                 ':email'=> $email
@@ -29,6 +30,8 @@ class User {
             $stm->execute();
     
             return $stm->fetchColumn() > 0;
+        }
+       
         
     }
     private function validateInput($input){
@@ -37,24 +40,54 @@ class User {
     private function hashPassword($password){
         return password_hash($password, PASSWORD_DEFAULT);
     }
-
+    public function getErrors(){
+        return $this->error;
+    }
 
     public function register(){
-        if($this->emailExists($this->email)){
-            array_push($this->error, "This email already exists");
-        }
         if(empty($this->username) || strlen($this->username) < 5){
             array_push($this->error, "The username should be at least 5 characters long");
         }
-        $stmt = $this->db->prepare("INSERT INTO users(username,email,role,password) VALUES(:username,:email,:role,;password)");
+        if($this->emailExists($this->email)){
+            array_push($this->error, "This email already exists");
+        }
+        if(empty($this->email) || !filter_var($this->email,FILTER_VALIDATE_EMAIL)){
+            array_push($this->error,"Invalid email form");
+        }
+        if(empty($this->password) || strlen($this->password) < 6){
+            array_push($this->error, "Password should contain at least 6 characters");
+        }
+        
+       if(empty($this->error)){
+        $stmt = $this->db->prepare("INSERT INTO users(username,email,role,password) VALUES(:username,:email,:role,:password)");
         $stmt->execute([
-            ":username" => $this->username ,
-            ":email" => $this->email , 
+            ":username" => $this->validateInput($this->username) ,
+            ":email" => $this->validateInput($this->email) , 
             ":role" => $this->role ,
-            ":password" => $this->password
+            ":password" => $this->hashPassword($this->password)
         ]);
+        
+       }
 
-        return $this->error;
+    }
+    public function login($email,$password){
+        $stmt = $this->db->prepare("SELECT * FROM users where email= :email ");
+        $stmt->execute([
+            ":email" => $this->validateInput($email)  
+        ]);
+        
+        $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        if(empty($userInfo)){
+            array_push($this->error , "The email or password isn't correct");
+        }else{
+            if(password_verify($password,$userInfo['password'])){
+                return $userInfo;
+            }else{
+                array_push($this->error,"The password or the email is not correct");
+            }
+
+        }
+        
     }
 
 }

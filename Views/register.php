@@ -1,3 +1,11 @@
+<?php
+session_start();
+$errors = [];
+if (isset($_SESSION['errors'])) {
+    $errors = $_SESSION['errors'];
+    unset($_SESSION['errors']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,31 +21,28 @@
     <div class="modal">
         <div class="modal-content">
             <h2>Create Your Account</h2>
-            <form action="register.php" method="POST" class="signup-form">
+            <?php foreach ($errors as $error): ?>
+                <p class="error"><?php echo $error; ?></p>
+            <?php endforeach; ?>
+            <form action="../Actions/signUp.php" method="POST" class="signup-form">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <input type="text" id="username" name="username">
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" id="email" name="email">
                 </div>
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirm_password">Confirm Password</label>
-                    <input type="password" id="confirm_password" name="confirm_password" required>
+                    <input type="password" id="password" name="password">
                 </div>
 
                 <div class="form-group">
                     <label for="role">I want to</label>
                     <select id="role" name="role" required>
-                        <option value="">Select your role</option>
                         <option value="student">Learn as a Student</option>
                         <option value="teacher">Teach as an Instructor</option>
                     </select>
