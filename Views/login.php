@@ -13,7 +13,7 @@
     <div class="modal">
         <div class="modal-content">
             <h2>Welcome Back</h2>
-            <form action="login.php" method="POST" class="signin-form">
+            <form action="../Actions/signIn.php" method="POST" class="signin-form">
                 <div class="form-group">
                     <label for="login-email">Email</label>
                     <input type="email" id="login-email" name="email" required>
