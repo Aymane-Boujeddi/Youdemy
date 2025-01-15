@@ -2,14 +2,14 @@
 require_once "Connect";
 class User {
 
-    private $username;
-    private $email;
-    private $password;
-    private $role;
-    private $status;
-    private $db;
+    protected $username;
+    protected $email;
+    protected $password;
+    protected $role;
+    protected $status;
+    protected $db;
     
-    private $error = [];
+    protected $error = [];
 
 
     public function __construct($username,$email,$password,$role,$status){
