@@ -6,16 +6,18 @@ class User {
     private $email;
     private $password;
     private $role;
+    private $status;
     private $db;
     
     private $error = [];
 
 
-    public function __construct($username,$email,$password,$role){
+    public function __construct($username,$email,$password,$role,$status){
         $this->username = $username;
         $this->email = $email;
         $this->role = $role;
         $this->password = $password;
+        $this->status = $status;
         $connection = new Database();
         $this->db = $connection->connect();
     }
@@ -59,11 +61,12 @@ class User {
         }
         
        if(empty($this->error)){
-        $stmt = $this->db->prepare("INSERT INTO users(username,email,role,password) VALUES(:username,:email,:role,:password)");
+        $stmt = $this->db->prepare("INSERT INTO users(username,email,role,password,status) VALUES(:username,:email,:role,:password,:status)");
         $stmt->execute([
             ":username" => $this->validateInput($this->username) ,
             ":email" => $this->validateInput($this->email) , 
             ":role" => $this->role ,
+            ":status" => $this->status,
             ":password" => $this->hashPassword($this->password)
         ]);
         
