@@ -1,6 +1,36 @@
 <?php
-
+require_once "User";
 class Admin extends User {
 
-    
+    public function displayPendingTeacher(){
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE role=:role and status=:status");
+        $stmt->execute([
+            ":role" => "teacher",
+            ":status" => "pending"
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function validateTeacher($id){
+        $stmt = $this->db->prepare("UPDATE users SET status=:status where userID=:id");
+        $stmt->execute([
+            ":status" => "active",
+            ":id" => $id
+        ]);
+
+    }
+    public function removeTeacher($id){
+        $stmt = $this->db->prepare("DELETE FROM users WHERE userID=:id");
+        $stmt->execute([
+            ":id" => $id
+        ]);
+
+    }
+    public function displayUsers(){
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE role!=:role ");
+        $stmt->execute([
+            ":role" => "admin"
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
