@@ -1,3 +1,9 @@
+<?php
+// session_start();
+// if(!isset($_SESSION['id']) && $_SESSION['role'] != 'teacher'){
+// header("location: ../index.php");
+// }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,6 +14,7 @@
     <link rel="stylesheet" href="../Assets/css/teacher.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="../Assets/js/teacher.js" defer></script>
+    <script src="../Assets/js/jquery-3.7.1.min.js" defer></script>
 </head>
 
 <body>
@@ -20,7 +27,7 @@
                 <a href="#add-course" class="active"><i class="fas fa-plus-circle"></i> Add Course</a>
                 <a href="#manage-courses"><i class="fas fa-tasks"></i> Manage Courses</a>
                 <a href="#statistics"><i class="fas fa-chart-bar"></i> Statistics</a>
-                <a href="#logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a href="../Actions/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </nav>
     </header>
@@ -57,7 +64,6 @@
                             <option value="">Select Type</option>
                             <option value="video">Video Course</option>
                             <option value="document">Document Based</option>
-                            <option value="mixed">Mixed Content</option>
                         </select>
                     </div>
                 </div>
@@ -65,25 +71,21 @@
                 <div class="form-group">
                     <label>Course Tags</label>
                     <div class="tags-wrapper">
-                        <div class="tags-search">
-                            <input type="text" id="tagSearch" placeholder="Search tags...">
-                            <span class="selected-count">0 selected</span>
-                        </div>
 
                         <div class="tags-container">
                             <div class="tags-group">
-                                <h4>Programming</h4>
+
                                 <div class="tags-list">
                                     <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="javascript">
+                                        <input type="checkbox" name="tags['javascript']" value="javascript">
                                         <span>JavaScript</span>
                                     </label>
                                     <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="python">
+                                        <input type="checkbox" name="tags['python']" value="python">
                                         <span>Python</span>
                                     </label>
                                     <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="java">
+                                        <input type="checkbox" name="tags['java']" value="java">
                                         <span>Java</span>
                                     </label>
                                     <label class="tag">
@@ -94,7 +96,6 @@
                             </div>
 
                             <div class="tags-group">
-                                <h4>Web Development</h4>
                                 <div class="tags-list">
                                     <label class="tag">
                                         <input type="checkbox" name="tags[]" value="html">
@@ -116,7 +117,6 @@
                             </div>
 
                             <div class="tags-group">
-                                <h4>Tools</h4>
                                 <div class="tags-list">
                                     <label class="tag">
                                         <input type="checkbox" name="tags[]" value="git">
@@ -136,19 +136,9 @@
                     </div>
                 </div>
 
-                <div class="form-group content-upload-section" style="display: none;">
-                    <label>Course Content</label>
-                    <div class="content-upload">
-                        <div class="upload-box">
-                            <i class="fas fa-video"></i>
-                            <p>Upload Video</p>
-                            <input type="file" accept="video/*" name="video" id="videoUpload">
-                        </div>
-                        <div class="upload-box">
-                            <i class="fas fa-file-pdf"></i>
-                            <p>Upload Document</p>
-                            <input type="file" accept=".pdf,.doc,.docx" name="document" id="documentUpload">
-                        </div>
+                <div class="form-group">
+                    <label for="courseContent">Course Content</label>
+                    <div id="contentInput">
                     </div>
                 </div>
 
@@ -205,6 +195,24 @@
 
         </section>
     </main>
+    <script>
+        const courseType = document.getElementById('courseType');
+        const contentInput = document.getElementById('contentInput');
+
+        courseType.addEventListener('change', function() {
+            if (this.value === 'video') {
+                contentInput.innerHTML = `
+                <input type="url" name="content" placeholder="Enter video URL" required>
+            `;
+            } else if (this.value === 'document') {
+                contentInput.innerHTML = `
+                <textarea name="content" rows="6" placeholder="Enter your course content here..." required></textarea>
+            `;
+            } else {
+                contentInput.innerHTML = '';
+            }
+        });
+    </script>
 </body>
 
 </html>

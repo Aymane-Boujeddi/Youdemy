@@ -6,8 +6,15 @@ $username = $_POST["username"];
 $email = $_POST["email"];
 $password = $_POST["password"];
 $role = $_POST["role"];
+$status;
 
-$newUser = new User($username,$email,$password,$role);
+if($role == 'teacher'){
+    $status = "pending";
+    $newUser = new User($username,$email,$password,$role,$status);
+}else{
+    $status = "active";
+    $newUser = new User($username,$email,$password,$role,$status);
+}
 $newUser->register();
 $_SESSION['errors'] = $newUser->getErrors();
 if(!empty($_SESSION['errors'])){

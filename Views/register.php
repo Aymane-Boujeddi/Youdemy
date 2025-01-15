@@ -32,7 +32,7 @@ if (isset($_SESSION['errors'])) {
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email">
+                    <input  id="email" name="email">
                 </div>
 
                 <div class="form-group">

@@ -344,3 +344,57 @@ input:focus, select:focus, textarea:focus {
     background: #ccc;
     border-radius: 3px;
 }
+
+/* Add these styles to your existing CSS */
+
+#videoInput input[type="url"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+#videoInput input[type="url"]:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+#documentInput textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 150px;
+    transition: border-color 0.3s ease;
+}
+
+#documentInput textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* Optional: Add some styling for better visual hierarchy */
+#contentInputSection {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Add these styles for the dynamic inputs */
+#contentInput input[type="url"],
+#contentInput textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+
+#contentInput textarea {
+    min-height: 150px;
+    resize: vertical;
+}

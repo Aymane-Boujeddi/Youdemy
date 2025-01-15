@@ -12,16 +12,28 @@
 <body>
     <div class="modal">
         <div class="modal-content">
+            <?php
+            session_start();
+            $errors = [];
+            if(isset($_SESSION['errors'])){
+                $errors = $_SESSION['errors'];
+                unset($_SESSION['errors']);
+            }
+            ?>
             <h2>Welcome Back</h2>
+            <?php foreach($errors as $error):?>
+                <p class="error"><?= $error?></p>
+                <?php endforeach?>
+                
             <form action="../Actions/signIn.php" method="POST" class="signin-form">
                 <div class="form-group">
                     <label for="login-email">Email</label>
-                    <input type="email" id="login-email" name="email" required>
+                    <input  id="login-email" name="email" >
                 </div>
 
                 <div class="form-group">
                     <label for="login-password">Password</label>
-                    <input type="password" id="login-password" name="password" required>
+                    <input type="password" id="login-password" name="password" >
                 </div>
 
                 <button type="submit" class="submit-btn">Sign In</button>
