@@ -1,5 +1,5 @@
 <?php
-require_once "../Classes/Admin";
+require_once "../Classes/Tags";
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $tags = $_POST["tags"];
     $allTags = explode(",",$tags);
@@ -9,7 +9,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         array_push($tagsArray,$trimmedTag);
     }
 
-    $admin = new Admin("","","","","");
-    $admin->addTags($tagsArray);
+    $tag = new Tags("");
+    $tag->addTags($tagsArray);
     header("location: ../Views/admin.php");
 }

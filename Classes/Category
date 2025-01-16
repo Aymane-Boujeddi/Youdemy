@@ -1,0 +1,30 @@
+<?php
+require_once "Connect";
+
+class Category {
+
+    private $categoryID;
+    private $categoryName;
+    private $db;
+
+    public function __construct($categoryName){
+        $this->categoryName = $categoryName;
+        $connect = new Database;
+        $this->db = $connect->connect();
+    }
+    public function addCategory(){
+        $stmt = $this->db->prepare("INSERT INTO category(category_name) values(:category)");
+        $stmt->execute([
+            ":category" => $this->categoryName
+        ]);
+
+    }
+    public function deleteCategory($id){
+        $stmt = $this->db->prepare("DELETE FROM category WHERE categoryID=:id");
+        $stmt->execute([
+            ":id" => $id
+        ]);
+    }
+        
+    
+}

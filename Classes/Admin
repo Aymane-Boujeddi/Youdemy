@@ -39,39 +39,13 @@ class Admin extends User {
             ":id" => $id
         ]);
     }
-    public function addCategory($category){
-        $stmt = $this->db->prepare("INSERT INTO category(category_name) values(:category)");
-        $stmt->execute([
-            ":category" => $category
-        ]);
-
-    }
+  
+    
     public function displayGategories(){
         $stmt = $this->db->prepare("SELECT * FROM category");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
        
-    }
-    public function deleteCategory($id){
-        $stmt = $this->db->prepare("DELETE FROM category WHERE categoryID=:id");
-        $stmt->execute([
-            ":id" => $id
-        ]);
-    }
-    public function addTags($tags){
-        foreach($tags as $tag){
-            $stmt = $this->db->prepare("INSERT INTO tags(tag_name) value(:tag)");
-            $stmt->execute([
-                ":tag" => $tag
-            ]);
-        }
-    }
-    public function deleteTag($id){
-        $stmt = $this->db->prepare("DELETE from tags where tagID=:id");
-        $stmt->execute([
-            ":id" => $id
-        ]);
-        
     }
     public function displayTags(){
         $stmt = $this->db->prepare("SELECT * FROM tags");
