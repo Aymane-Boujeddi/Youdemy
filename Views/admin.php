@@ -12,9 +12,12 @@
 <body>
     <?php
     require_once "../Classes/Admin";
-    $admin = new Admin("","","","","");
+    require_once "../Classes/Render";
+    $admin = new Admin("", "", "", "", "");
     $pendingTeachers = $admin->displayPendingTeacher();
     $Users = $admin->displayUsers();
+    $categories = $admin->displayGategories();
+    $tags = $admin->displayTags();
     ?>
     <header>
         <nav class="navbar">
@@ -24,7 +27,7 @@
                 </div>
                 <ul class="nav-links">
 
-                    <li class="active" data-tab="teachers">
+                    <li data-tab="teachers">
                         <i class="fas fa-chalkboard-teacher"></i>
                         <span>Teachers</span>
                     </li>
@@ -60,7 +63,7 @@
     <main class="main-content">
 
 
-        <section class="content-section active" id="teachers">
+        <section class="content-section " id="teachers">
             <h2>Teacher Validate</h2>
             <div class="table-container">
 
@@ -74,22 +77,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <?php
-                    foreach($pendingTeachers as $teacher):
-                    ?>
-                        <tr>
-                            <td><?= $teacher['username']?></td>
-                            <td><?= $teacher['email']?></td>
-                            <td>
-                                <span class="status pending"><?= $teacher['status']?></span>
-                            </td>
-                            <td class="actions">
-                                <a <?php echo "href='../Actions/teacherValidate.php?teacherID=" . $teacher['userID'] ."'";?>><button class="validate-btn"><i class="fas fa-check"></i></button></a>
-                                <a <?php echo "href='../Actions/teacherRemove.php?teacherID=" . $teacher['userID'] . "'" ;?>><button class="reject-btn"><i class="fas fa-times"></i></button></a>
+                        <?php
+                        foreach ($pendingTeachers as $teacher):
+                        ?>
+                            <tr>
+                                <td><?= $teacher['username'] ?></td>
+                                <td><?= $teacher['email'] ?></td>
+                                <td>
+                                    <span class="status pending"><?= $teacher['user_status'] ?></span>
+                                </td>
+                                <td class="actions">
+                                    <a <?php echo "href='../Actions/teacherValidate.php?teacherID=" . $teacher['userID'] . "'"; ?>><button class="validate-btn"><i class="fas fa-check"></i></button></a>
+                                    <a <?php echo "href='../Actions/userRemove.php?userID=" . $teacher['userID'] . "'"; ?>><button class="reject-btn"><i class="fas fa-times"></i></button></a>
 
-                            </td>
-                        </tr>
-                        <?php endforeach?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
                     </tbody>
                 </table>
             </div>
@@ -110,27 +113,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                        foreach($Users as $user):
-                        ?>
-                        <tr>
+                        <?php
+                        foreach ($Users as $user) {
 
-                            <td><?= $user['username']?></td>
-                            <td><?= $user['email']?></td>
-                            <td><?= $user['role']?></td>
-                            <td>
-                               <form action="../Actions/" onchange="this.form.submit">
-                               <select name="status" id="status" class="status-select">
-                                    <option value="inactive">Inactive</option>
-                                    <option value="active">Active</option>
-                                </select>
-                               </form>
-                            </td>
-                            <td class="actions">
-                                <a href=""><button class="delete-btn"><i class="fas fa-trash"></i></button></a>
-                            </td>
-                        </tr>
-                        <?php endforeach?>
+                            echo Render::renderuserForAdmin($user);
+                        }
+                        ?>
+
+
                     </tbody>
                 </table>
             </div>
@@ -180,18 +170,21 @@
                     </button>
                 </div>
                 <div class="categories-grid">
-                    <div class="category-card">
-                        <div class="category-header">
-                            <h3>Programming</h3>
+                    <?php foreach ($categories as $category): ?>
+                        <div class="category-card">
+                            <div class="category-header">
+                                <h3><?= $category['category_name'] ?></h3>
+                            </div>
+                            <div class="category-actions">
+                                <a <?= "href='../Actions/deleteCategory.php?ID=" . $category['categoryID'] . "'" ?>>
+                                    <button class="delete-btn">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </a>
+                            </div>
                         </div>
-                        <div class="category-actions">
-                            <button class="delete-btn">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="category-card">
+                    <?php endforeach ?>
+                    <!-- <div class="category-card">
                         <div class="category-header">
                             <h3>Design</h3>
                         </div>
@@ -211,32 +204,59 @@
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>
+
+        <div class="modal" id="categoryModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Category</h3>
+                    <button class="close-btn" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="categoryForm" class="modal-form" action="../Actions/addCategory.php" method="POST">
+                    <div class="form-group">
+                        <label for="categoryName">Category Name</label>
+                        <input type="text" id="categoryName" name="category" required
+                            placeholder="Enter category name">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-check"></i>
+                            Save Category
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <section class="content-section" id="tags">
             <h2>Tag Management</h2>
             <div class="tags-container">
                 <div class="tags-actions">
-                    <button class="add-btn">
-                        <i class="fas fa-plus"></i>
-                        Add Tag
+                    <button class="primary-btn" id="addTagBtn">
+                        <span class="btn-icon">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span class="btn-text">Add New Tags</span>
                     </button>
-
                 </div>
                 <div class="tags-grid">
+                    <?php foreach($tags as $tag):?>
                     <div class="tag-item">
-                        <span>JavaScript</span>
+                        <span><?=$tag['tag_name']?></span>
                         <div class="tag-actions">
 
-                            <button class="delete-btn">
+                            <a <?= 'href="../Actions/deleteTags.php?tagID=' . $tag['tagID'] . '"'?>><button class="delete-btn">
                                 <i class="fas fa-times"></i>
-                            </button>
+                            </button></a>
                         </div>
                     </div>
-                    <div class="tag-item">
+                    <?php endforeach ?>
+                    <!-- <div class="tag-item">
                         <span>Python</span>
                         <div class="tag-actions">
 
@@ -271,10 +291,39 @@
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </section>
+
+        <div class="modal" id="tagModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Tags</h3>
+                    <button class="close-btn" id="closeTagModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="tagForm" class="modal-form" action="../Actions/addTags.php" method="POST">
+                    <div class="form-group">
+                        <label for="tagNames">Tags (Separate with commas)</label>
+                        <textarea
+                            id="tagNames"
+                            name="tags"
+                            required
+                            placeholder="Enter tags (e.g., JavaScript, Python, Web Development)"
+                            rows="5"></textarea>
+                        <small class="form-hint">Enter multiple tags separated by commas</small>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">
+                            <i class="fas fa-check"></i>
+                            Save Tags
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <section class="content-section" id="statistics">
             <h2>Platform Statistics</h2>
