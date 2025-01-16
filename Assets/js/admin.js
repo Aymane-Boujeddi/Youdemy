@@ -77,7 +77,7 @@ tagForm.addEventListener("input", (e) => {
     if (!/[a-zA-Z,.1-9]/.test(lastChar)) {
         e.target.value = input.slice(0, -1)
     }
-});
+})
 // tagForm.addEventListener("input" , (e)=>{
 //     const input = e.target.value
 //     const lastChar = input.charAt(-1)
