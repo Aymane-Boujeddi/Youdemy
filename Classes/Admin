@@ -41,16 +41,7 @@ class Admin extends User {
     }
   
     
-    public function displayGategories(){
-        $stmt = $this->db->prepare("SELECT * FROM category");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-       
-    }
-    public function displayTags(){
-        $stmt = $this->db->prepare("SELECT * FROM tags");
-        $stmt->execute([]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+   
+  
 
 }

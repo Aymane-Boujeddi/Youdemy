@@ -35,5 +35,10 @@ class Tags {
         ]);
         
     }
+    public function displayTags(){
+        $stmt = $this->db->prepare("SELECT * FROM tags");
+        $stmt->execute([]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
 }

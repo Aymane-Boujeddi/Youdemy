@@ -25,6 +25,12 @@ class Category {
             ":id" => $id
         ]);
     }
+    public function displayGategories(){
+        $stmt = $this->db->prepare("SELECT * FROM category");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
+    }
         
     
 }

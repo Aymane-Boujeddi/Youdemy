@@ -6,7 +6,7 @@
             </div>
             <div class="auth-buttons">
             <a href="#"><button class="profile-btn" ><i class="fa fa-user"><?= (isset($_SESSION['username'])) ? $_SESSION['username'] : ''?></i></button></a> 
-            <a href="<?= $_SESSION['role'] . '.php  '?>"><button class="dashboard-btn" ><i class="fa fa-dashboard">Dashboard</i></button></a> 
+            <a href="<?= 'Views/' . $_SESSION['role'] . '.php  '?>"><button class="dashboard-btn" ><i class="fa fa-dashboard">Dashboard</i></button></a> 
             <a href="Actions/logout.php"><button class="logout-btn"><i class="fa-solid fa-left-from-bracket">Logout</i></button></a>
             </div>
         </nav>

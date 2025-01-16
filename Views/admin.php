@@ -13,11 +13,15 @@
     <?php
     require_once "../Classes/Admin";
     require_once "../Classes/Render";
+    require_once "../Classes/Category";
+    require_once "../Classes/Tags";
     $admin = new Admin("", "", "", "", "");
     $pendingTeachers = $admin->displayPendingTeacher();
     $Users = $admin->displayUsers();
-    $categories = $admin->displayGategories();
-    $tags = $admin->displayTags();
+    $categroyInst = new Category("");
+    $categories = $categroyInst->displayGategories();
+    $tagInst = new Tags("");
+    $tags = $tagInst->displayTags();
     ?>
     <header>
         <nav class="navbar">
