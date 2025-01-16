@@ -1,0 +1,39 @@
+<?php
+require_once "Connect";
+
+class Tags {
+
+    private $tagID;
+    private $tagName;
+    private $db;
+
+    public function __construct($tagName){
+        $this->tagName = $tagName;
+        $connect = new Database();
+        $this->db = $connect->connect();
+
+    }
+    public function getTag(){
+        return $this->tagName;
+    }
+    public function setTag($tagname){
+        $this->tagName = $tagname;
+    }
+
+    public function addTags($tags){
+        foreach($tags as $tag){
+            $stmt = $this->db->prepare("INSERT INTO tags(tag_name) value(:tag)");
+            $stmt->execute([
+                ":tag" => $tag
+            ]);
+        }
+    }
+    public function deleteTag($id){
+        $stmt = $this->db->prepare("DELETE from tags where tagID=:id");
+        $stmt->execute([
+            ":id" => $id
+        ]);
+        
+    }
+
+}

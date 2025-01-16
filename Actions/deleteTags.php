@@ -1,9 +1,9 @@
 <?php
-require_once "../Classes/Admin";
+require_once "../Classes/Tags";
 if($_SERVER["REQUEST_METHOD"] == "GET"){
     $id = $_GET['tagID'];
 
-    $admin = new Admin("","","","","");
-    $admin->deleteTag($id);
+    $tag = new Tags("");
+    $tag->deleteTag($id);
     header("location: ../Views/admin.php");
 }

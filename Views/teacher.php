@@ -1,8 +1,10 @@
 <?php
+require_once "../Classes/Teacher";
 // session_start();
 // if(!isset($_SESSION['id']) && $_SESSION['role'] != 'teacher'){
 // header("location: ../index.php");
 // }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,8 +1,8 @@
 <?php
-require_once "../Classes/Admin";
+require_once "../Classes/Category";
 if($_SERVER["REQUEST_METHOD"] == "GET"){
     $id = $_GET["ID"];
-    $admin = new Admin("","","","","");
-    $admin->deleteCategory($id);
+    $category = new Category("");
+    $category->deleteCategory($id);
     header("location: ../Views/admin.php");
 }
