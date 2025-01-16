@@ -3,7 +3,7 @@ require_once "User";
 class Admin extends User {
 
     public function displayPendingTeacher(){
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE role=:role and status=:status");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE role=:role and user_status=:status");
         $stmt->execute([
             ":role" => "teacher",
             ":status" => "pending"
@@ -11,14 +11,14 @@ class Admin extends User {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function validateTeacher($id){
-        $stmt = $this->db->prepare("UPDATE users SET status=:status where userID=:id");
+        $stmt = $this->db->prepare("UPDATE users SET user_status=:status where userID=:id");
         $stmt->execute([
             ":status" => "active",
             ":id" => $id
         ]);
 
     }
-    public function removeTeacher($id){
+    public function removeUser($id){
         $stmt = $this->db->prepare("DELETE FROM users WHERE userID=:id");
         $stmt->execute([
             ":id" => $id
@@ -30,6 +30,52 @@ class Admin extends User {
         $stmt->execute([
             ":role" => "admin"
         ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function changeStatus($status,$id){
+        $stmt = $this->db->prepare("UPDATE users SET user_status=:status WHERE userID=:id");
+        $stmt->execute([
+            ":status" => $status,
+            ":id" => $id
+        ]);
+    }
+    public function addCategory($category){
+        $stmt = $this->db->prepare("INSERT INTO category(category_name) values(:category)");
+        $stmt->execute([
+            ":category" => $category
+        ]);
+
+    }
+    public function displayGategories(){
+        $stmt = $this->db->prepare("SELECT * FROM category");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+       
+    }
+    public function deleteCategory($id){
+        $stmt = $this->db->prepare("DELETE FROM category WHERE categoryID=:id");
+        $stmt->execute([
+            ":id" => $id
+        ]);
+    }
+    public function addTags($tags){
+        foreach($tags as $tag){
+            $stmt = $this->db->prepare("INSERT INTO tags(tag_name) value(:tag)");
+            $stmt->execute([
+                ":tag" => $tag
+            ]);
+        }
+    }
+    public function deleteTag($id){
+        $stmt = $this->db->prepare("DELETE from tags where tagID=:id");
+        $stmt->execute([
+            ":id" => $id
+        ]);
+        
+    }
+    public function displayTags(){
+        $stmt = $this->db->prepare("SELECT * FROM tags");
+        $stmt->execute([]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

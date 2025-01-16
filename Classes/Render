@@ -1,0 +1,39 @@
+<?php
+
+
+class Render {
+
+    public static function renderuserForAdmin($user){
+        $status = [
+            "active" => "Active",
+            "inactive" => "Inactive"
+        ];
+
+        $userCard = "<tr>
+
+                            <td> {$user['username']}</td>
+                            <td>{$user['email']}</td>
+                            <td> {$user['role']}</td>
+                            <td>
+                               <form action='../Actions/changeUserStatus.php' method='POST' >
+                                <input type='hidden' name='ID' value='{$user['userID']}'>
+                               <select name='status' id='status' class='status-select' onchange='this.form.submit()'>";
+            foreach($status as $key => $value){
+                $selected = ($user['user_status'] === $key) ? 'selected' : '';
+                $userCard .= '<option value="' . $key . '"' . $selected . '>' . $value . ' </option>';
+            }
+
+
+        $userCard.= "
+                                </select>
+                               </form>
+                            </td>
+                            <td class='actions'>
+                                <a href='../Actions/userRemove.php?userID={$user['userID']}'><button class='delete-btn'><i class='fas fa-trash'></i></button></a>
+                            </td>
+                        </tr>";  
+                        
+                        return $userCard;
+
+    }
+}
