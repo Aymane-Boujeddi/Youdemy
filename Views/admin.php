@@ -249,16 +249,16 @@
                     </button>
                 </div>
                 <div class="tags-grid">
-                    <?php foreach($tags as $tag):?>
-                    <div class="tag-item">
-                        <span><?=$tag['tag_name']?></span>
-                        <div class="tag-actions">
+                    <?php foreach ($tags as $tag): ?>
+                        <div class="tag-item">
+                            <span><?= $tag['tag_name'] ?></span>
+                            <div class="tag-actions">
 
-                            <a <?= 'href="../Actions/deleteTags.php?tagID=' . $tag['tagID'] . '"'?>><button class="delete-btn">
-                                <i class="fas fa-times"></i>
-                            </button></a>
+                                <a <?= 'href="../Actions/deleteTags.php?tagID=' . $tag['tagID'] . '"' ?>><button class="delete-btn">
+                                        <i class="fas fa-times"></i>
+                                    </button></a>
+                            </div>
                         </div>
-                    </div>
                     <?php endforeach ?>
                     <!-- <div class="tag-item">
                         <span>Python</span>

@@ -1,9 +1,18 @@
 <?php
 require_once "../Classes/Teacher";
-// session_start();
+require_once "../Classes/Category";
+require_once "../Classes/Tags";
+session_start();
+if (isset($_SESSION['id'])) {
+    $teacherID = $_SESSION['id'];
+}
 // if(!isset($_SESSION['id']) && $_SESSION['role'] != 'teacher'){
 // header("location: ../index.php");
 // }
+$category = new Category("");
+$tag = new Tags("");
+$categories = $category->displayGategories();
+$tags = $tag->displayTags();
 
 ?>
 <!DOCTYPE html>
@@ -15,8 +24,7 @@ require_once "../Classes/Teacher";
     <title>Teacher Dashboard - Youdemy</title>
     <link rel="stylesheet" href="../Assets/css/teacher.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="../Assets/js/teacher.js" defer></script>
-    <script src="../Assets/js/jquery-3.7.1.min.js" defer></script>
+
 </head>
 
 <body>
@@ -37,10 +45,11 @@ require_once "../Classes/Teacher";
     <main class="dashboard-main">
         <section id="add-course" class="dashboard-section">
             <h2><i class="fas fa-plus-circle"></i> Add New Course</h2>
-            <form id="newCourseForm" class="course-form">
+            <form id="newCourseForm" class="course-form" action="../Actions/addCourse.php" method="POST">
                 <div class="form-group">
                     <label for="courseTitle">Course Title</label>
                     <input type="text" id="courseTitle" name="title" required>
+                    <input type="hidden" name="id" value=<?= '"' . $teacherID . '"' ?>>
                 </div>
 
                 <div class="form-group">
@@ -52,17 +61,14 @@ require_once "../Classes/Teacher";
                     <div class="form-group">
                         <label for="courseCategory">Category</label>
                         <select id="courseCategory" name="category" required>
-                            <option value="">Select Category</option>
-                            <option value="development">Development</option>
-                            <option value="design">Design</option>
-                            <option value="business">Business</option>
-                            <option value="marketing">Marketing</option>
+                            <?php foreach ($categories as $category): ?>
+                                <option value=<?= '"' . $category['categoryID'] . '"' ?>><?= $category['category_name'] ?></option>
+                            <?php endforeach ?>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label for="courseType">Course Type</label>
-                        <select id="courseType" name="type" required>
+                        <select id="courseType" name="type">
                             <option value="">Select Type</option>
                             <option value="video">Video Course</option>
                             <option value="document">Document Based</option>
@@ -78,62 +84,18 @@ require_once "../Classes/Teacher";
                             <div class="tags-group">
 
                                 <div class="tags-list">
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags['javascript']" value="javascript">
-                                        <span>JavaScript</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags['python']" value="python">
-                                        <span>Python</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags['java']" value="java">
-                                        <span>Java</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="php">
-                                        <span>PHP</span>
-                                    </label>
+                                    <?php foreach ($tags as $tag): ?>
+                                        <label class="tag">
+                                            <input type="checkbox" <?= 'name="tag[' . $tag["tagID"] . ']"' ?> value="<?= $tag['tagID'] ?>">
+                                            <span><?= $tag['tag_name'] ?></span>
+                                        </label>
+                                    <?php endforeach ?>
+
                                 </div>
                             </div>
 
-                            <div class="tags-group">
-                                <div class="tags-list">
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="html">
-                                        <span>HTML</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="css">
-                                        <span>CSS</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="react">
-                                        <span>React</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="angular">
-                                        <span>Angular</span>
-                                    </label>
-                                </div>
-                            </div>
 
-                            <div class="tags-group">
-                                <div class="tags-list">
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="git">
-                                        <span>Git</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="docker">
-                                        <span>Docker</span>
-                                    </label>
-                                    <label class="tag">
-                                        <input type="checkbox" name="tags[]" value="vscode">
-                                        <span>VS Code</span>
-                                    </label>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -141,6 +103,8 @@ require_once "../Classes/Teacher";
                 <div class="form-group">
                     <label for="courseContent">Course Content</label>
                     <div id="contentInput">
+                        <input id="contentvid" type="url" name="contentVideo" placeholder="Enter video URL" style="display: none;">
+                        <textarea id="contentdoc" name="contentText" rows="6" placeholder="Enter your course content here..." style="display: none;"></textarea>
                     </div>
                 </div>
 
@@ -155,6 +119,28 @@ require_once "../Classes/Teacher";
             </div>
 
             <div class="courses-grid">
+                <!-- Course Card Example -->
+                <div class="course-card">
+                    <div class="course-header">
+                        <h3>Web Development</h3>
+                        <span class="course-type">Video Course</span>
+                    </div>
+                    <div class="course-stats">
+                        <div class="stat">
+                            <i class="fas fa-users"></i>
+                            <span>32 Students</span>
+                        </div>
+                        <div class="stat">
+                            <i class="fas fa-star"></i>
+                            <span>4.5 Rating</span>
+                        </div>
+                    </div>
+                    <div class="course-actions">
+                        <button class="view-btn"><i class="fas fa-eye"></i> View</button>
+                        <button class="edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="delete-btn"><i class="fas fa-trash"></i> Delete</button>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -198,22 +184,50 @@ require_once "../Classes/Teacher";
         </section>
     </main>
     <script>
-        const courseType = document.getElementById('courseType');
-        const contentInput = document.getElementById('contentInput');
+        const courseType = document.getElementById('courseType')
+        const contentInput = document.getElementById('contentInput')
+        const vidContent = document.getElementById('contentvid')
+        const docContent = document.getElementById('contentdoc')
 
         courseType.addEventListener('change', function() {
             if (this.value === 'video') {
-                contentInput.innerHTML = `
-                <input type="url" name="content" placeholder="Enter video URL" required>
-            `;
+                docContent.style.display = 'none'
+                vidContent.style.display = 'block'
             } else if (this.value === 'document') {
-                contentInput.innerHTML = `
-                <textarea name="content" rows="6" placeholder="Enter your course content here..." required></textarea>
-            `;
+                docContent.style.display = 'block'
+                vidContent.style.display = 'none'
             } else {
-                contentInput.innerHTML = '';
+                docContent.style.display = 'none'
+                vidContent.style.display = 'none'
             }
         });
+
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const sections = document.querySelectorAll('.dashboard-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                // Remove active class from all links
+                navLinks.forEach(link => link.classList.remove('active'));
+
+                // Add active class to clicked link
+                this.classList.add('active');
+
+                // Hide all sections
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Show the corresponding section
+                const targetId = this.getAttribute('href').substring(1);
+                document.getElementById(targetId).style.display = 'block';
+            });
+        });
+
+        // Show first section by default
+        document.getElementById('add-course').style.display = 'block';
     </script>
 </body>
 
