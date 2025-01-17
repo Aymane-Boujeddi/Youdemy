@@ -398,3 +398,146 @@ input:focus, select:focus, textarea:focus {
     min-height: 150px;
     resize: vertical;
 }
+
+/* Course Management Styles */
+.courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.course-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.course-type {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8em;
+}
+
+.course-stats {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #666;
+}
+
+.course-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.course-actions button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.view-btn {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.edit-btn {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.delete-btn {
+    background: #ffebee;
+    color: #c62828;
+}
+
+/* Statistics Styles */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-card i {
+    font-size: 2em;
+    color: #1976d2;
+}
+
+.stat-info h3 {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 5px;
+}
+
+.stat-info p {
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    height: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .courses-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .course-actions {
+        flex-direction: column;
+    }
+    
+    .course-actions button {
+        width: 100%;
+        justify-content: center;
+    }
+}

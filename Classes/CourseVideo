@@ -1,0 +1,44 @@
+<?php
+require_once "Course";
+class CourseVideo extends Course
+{
+    private $contentType;
+    private $videoContent;
+
+    public function __construct($title,$category,$description,$teacherID,$type, $content)
+    {
+        parent::__construct($title,$category,$description,$teacherID);
+        $this->contentType = $type;
+        $this->videoContent = $content;
+    }
+    public function getErrrors(){
+        return $this->errors;
+    }
+ 
+
+    public function addCourse($tagsID) {
+        
+        $courseStmt = $this->db->prepare("INSERT INTO courses(userID,title,description,categoryID,content_type) values(:userID,:title,:description,:categoryID,:type)");
+        $courseStmt->execute([
+            ":userID" => $this->teacherID,
+            ":title" => $this->title,
+            ":description" => $this->description,
+            ":categoryID" => $this->category,
+            ":type" => $this->contentType
+        ]);
+        $courseID = $this->db->lastInsertId();
+        $contentStmt = $this->db->prepare("INSERT INTO course_video(courseID,course_content) values(:courseID,:content)");
+        $contentStmt->execute([
+            ":courseID" => $courseID,
+            ":content" => $this->videoContent
+        ]);
+
+        foreach($tagsID as $tagID){
+            $tagStmt = $this->db->prepare("INSERT INTO course_tag(courseID,tagID) value(:courseID,:tagID)");
+            $tagStmt->execute([
+                ":courseID" => $courseID,
+                ":tagID" => $tagID
+            ]);
+        }
+    }
+}
