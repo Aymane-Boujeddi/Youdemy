@@ -18,6 +18,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         header("location: ../Views/teacher.php");
         exit();
            
+    } elseif($type == "document"){
+        $content = $_POST['contentText'];
+        $newCourse = new CourseText($title,$category,$desciption,$teacherID,$type,$content);
+        $newCourse->addCourse($tags);
+        header("location: ../Views/teacher.php");
+        exit();
+
     }
    
     
