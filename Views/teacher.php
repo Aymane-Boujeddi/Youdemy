@@ -6,6 +6,11 @@ session_start();
 if (isset($_SESSION['id'])) {
     $teacherID = $_SESSION['id'];
 }
+$errors = [];
+if(isset($_SESSION['errors']) && !empty($_SESSION['errors'])){
+    $errors = $_SESSION['errors'];
+    unset($_SESSION['errors']);
+}
 // if(!isset($_SESSION['id']) && $_SESSION['role'] != 'teacher'){
 // header("location: ../index.php");
 // }
@@ -13,6 +18,10 @@ $category = new Category("");
 $tag = new Tags("");
 $categories = $category->displayGategories();
 $tags = $tag->displayTags();
+$teacher = new teacher("", "", "", "", "");
+$courses = $teacher->displayCourses($teacherID);
+$courseCount = $teacher->courseCount($teacherID);
+
 
 ?>
 <!DOCTYPE html>
@@ -37,6 +46,7 @@ $tags = $tag->displayTags();
                 <a href="#add-course" class="active"><i class="fas fa-plus-circle"></i> Add Course</a>
                 <a href="#manage-courses"><i class="fas fa-tasks"></i> Manage Courses</a>
                 <a href="#statistics"><i class="fas fa-chart-bar"></i> Statistics</a>
+                <a href="#enrollments"><i class="fas fa-user-graduate"></i> Enrollments</a>
                 <a href="../Actions/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
         </nav>
@@ -46,21 +56,26 @@ $tags = $tag->displayTags();
         <section id="add-course" class="dashboard-section">
             <h2><i class="fas fa-plus-circle"></i> Add New Course</h2>
             <form id="newCourseForm" class="course-form" action="../Actions/addCourse.php" method="POST">
+                <?php foreach($errors as $error){
+                    
+                } ?>
+
                 <div class="form-group">
                     <label for="courseTitle">Course Title</label>
-                    <input type="text" id="courseTitle" name="title" required>
+                    <input type="text" id="courseTitle" name="title" >
                     <input type="hidden" name="id" value=<?= '"' . $teacherID . '"' ?>>
                 </div>
 
                 <div class="form-group">
                     <label for="courseDescription">Course Description</label>
-                    <textarea id="courseDescription" name="description" rows="4" required></textarea>
+                    <textarea id="courseDescription" name="description" rows="4" ></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="courseCategory">Category</label>
-                        <select id="courseCategory" name="category" required>
+                        <select id="courseCategory" name="category" >
+                            <option value="" >Select a category</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value=<?= '"' . $category['categoryID'] . '"' ?>><?= $category['category_name'] ?></option>
                             <?php endforeach ?>
@@ -109,38 +124,48 @@ $tags = $tag->displayTags();
                 </div>
 
                 <button type="submit" class="submit-btn">Create Course</button>
+                <button type="submit" class="cancel-btn" onclick="this.form.reset()">Cancel</button>
             </form>
         </section>
 
         <section id="manage-courses" class="dashboard-section" style="display: none;">
             <h2><i class="fas fa-tasks"></i> Manage Courses</h2>
-            <div class="search-bar">
-                <input type="text" id="courseSearch" placeholder="Search courses...">
-            </div>
-
-            <div class="courses-grid">
-                <!-- Course Card Example -->
-                <div class="course-card">
-                    <div class="course-header">
-                        <h3>Web Development</h3>
-                        <span class="course-type">Video Course</span>
-                    </div>
-                    <div class="course-stats">
-                        <div class="stat">
-                            <i class="fas fa-users"></i>
-                            <span>32 Students</span>
-                        </div>
-                        <div class="stat">
-                            <i class="fas fa-star"></i>
-                            <span>4.5 Rating</span>
-                        </div>
-                    </div>
-                    <div class="course-actions">
-                        <button class="view-btn"><i class="fas fa-eye"></i> View</button>
-                        <button class="edit-btn"><i class="fas fa-edit"></i> Edit</button>
-                        <button class="delete-btn"><i class="fas fa-trash"></i> Delete</button>
-                    </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <input type="text" id="courseSearch" placeholder="Search courses...">
                 </div>
+                <table class="courses-table">
+                    <thead>
+                        <tr>
+                            <th>Course Title</th>
+                            <th>Category</th>
+                            <th>Type</th>
+                            <th>Students</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($courses as $course): ?>
+                            <tr>
+                                <td><?= $course['title'] ?></td>
+                                <td><?= $course['category_name'] ?></td>
+                                <td><?= $course['content_type'] ?></td>
+                                <td></td>
+                                <td class="action-buttons">
+                                    <button class="view-btn" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="edit-btn" title="Edit Course">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="delete-btn" title="Delete Course">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -151,7 +176,7 @@ $tags = $tag->displayTags();
                     <i class="fas fa-book-open"></i>
                     <div class="stat-info">
                         <h3>Total Courses</h3>
-                        <p id="totalCourses">0</p>
+                        <p id="totalCourses"><?= $courseCount['course_count'] ?></p>
                     </div>
                 </div>
 
@@ -163,13 +188,6 @@ $tags = $tag->displayTags();
                     </div>
                 </div>
 
-                <div class="stat-card">
-                    <i class="fas fa-star"></i>
-                    <div class="stat-info">
-                        <h3>Average Rating</h3>
-                        <p id="averageRating">0.0</p>
-                    </div>
-                </div>
 
                 <div class="stat-card">
                     <i class="fas fa-certificate"></i>
@@ -181,6 +199,35 @@ $tags = $tag->displayTags();
             </div>
 
 
+        </section>
+
+        <section id="enrollments" class="dashboard-section" style="display: none;">
+            <h2><i class="fas fa-user-graduate"></i> Course Enrollments</h2>
+            <div class="table-container">
+                
+                <table class="enrollments-table">
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Course</th>
+                            <th>Enrollment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="student-info">
+                                    <span>John Doe</span>
+                                </div>
+                            </td>
+                            <td>Web Development Basics</td>
+                            <td>Jan 15, 2024</td>
+                        </tr>
+
+                       
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
     <script>
@@ -207,22 +254,24 @@ $tags = $tag->displayTags();
 
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
-                e.preventDefault();
+                if (!this.classList.contains('logout-btn')) {
+                    e.preventDefault();
 
-                // Remove active class from all links
-                navLinks.forEach(link => link.classList.remove('active'));
+                    // Remove active class from all links
+                    navLinks.forEach(link => link.classList.remove('active'));
 
-                // Add active class to clicked link
-                this.classList.add('active');
+                    // Add active class to clicked link
+                    this.classList.add('active');
 
-                // Hide all sections
-                sections.forEach(section => {
-                    section.style.display = 'none';
-                });
+                    // Hide all sections
+                    sections.forEach(section => {
+                        section.style.display = 'none';
+                    });
 
-                // Show the corresponding section
-                const targetId = this.getAttribute('href').substring(1);
-                document.getElementById(targetId).style.display = 'block';
+                    // Show the corresponding section
+                    const targetId = this.getAttribute('href').substring(1);
+                    document.getElementById(targetId).style.display = 'block';
+                }
             });
         });
 

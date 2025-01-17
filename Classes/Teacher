@@ -2,6 +2,24 @@
 require_once "User";
 class Teacher extends User {
 
-
+    public function displayCourses($teacherID){
+        $stmt = $this->db->prepare("SELECT c.* , vid.* , doc.* , cat.*
+                                    FROM courses c
+									LEFT JOIN course_video vid on c.courseID = vid.courseID
+                                    LEFT JOIN course_text doc on c.courseID = doc.courseID 
+                                    left JOIN category cat on c.categoryID = cat.categoryID;
+                                    WHERE userID = :id");
+        $stmt->execute([
+            ":id" => $teacherID
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function courseCount($teacherID){
+        $stmt = $this->db->prepare("SELECT count(courseID) as course_count FROM courses WHERE userID = :id");
+        $stmt->execute([
+            ":id" => $teacherID
+        ]);
+       return $stmt->fetch();
+    }
     
 }

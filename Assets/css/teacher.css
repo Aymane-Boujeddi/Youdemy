@@ -541,3 +541,219 @@ input:focus, select:focus, textarea:focus {
         justify-content: center;
     }
 }
+
+/* Table Styles */
+.table-container {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.table-header {
+    margin-bottom: 20px;
+}
+
+.table-header input {
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.courses-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.courses-table th,
+.courses-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.courses-table th {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.courses-table tr:hover {
+    background-color: #f8f9fa;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-buttons button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.view-btn {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.view-btn:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.edit-btn {
+    background-color: #fff3e0;
+    color: #f57c00;
+}
+
+.edit-btn:hover {
+    background-color: #f57c00;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.delete-btn:hover {
+    background-color: #c62828;
+    color: white;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .courses-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .table-header input {
+        max-width: 100%;
+    }
+}
+
+/* Enrollments Table Styles */
+.filter-select {
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    margin-left: 10px;
+    color: #2c3e50;
+    background-color: white;
+}
+
+.enrollments-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.enrollments-table th,
+.enrollments-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.student-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Table Header with Filters */
+.table-header {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.table-header input {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .table-header {
+        flex-direction: column;
+    }
+    
+    .filter-select {
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    .student-info span {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .enrollments-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* Cancel Button Styling */
+.cancel-btn {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 2px solid #e9ecef;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+}
+
+.cancel-btn:hover {
+    background-color: #e9ecef;
+    color: #495057;
+    border-color: #dee2e6;
+}
+
+.cancel-btn:active {
+    transform: translateY(1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cancel-btn {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+    }
+}

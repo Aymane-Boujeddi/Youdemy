@@ -7,40 +7,49 @@ class CourseText extends Course
     private $contentType;
     private $textContent;
 
-    public function __construct($title,$category,$description,$teacherID,$type, $content)
+    public function __construct($title, $category, $description, $teacherID, $type, $content)
     {
-        parent::__construct($title,$category,$description,$teacherID);
+        parent::__construct($title, $category, $description, $teacherID);
         $this->contentType = $type;
         $this->textContent = $content;
     }
-    public function getErrrors(){
+    public function getErrors()
+    {
         return $this->errors;
     }
-  
 
-    public function addCourse($tagsID) {
-        
-        $courseStmt = $this->db->prepare("INSERT INTO courses(userID,title,description,categoryID,content_type) values(:userID,:title,:description,:categoryID,:type)");
-        $courseStmt->execute([
-            ":userID" => $this->teacherID,
-            ":title" => $this->title,
-            ":description" => $this->description,
-            ":categoryID" => $this->category,
-            ":type" => $this->contentType
-        ]);
-        $courseID = $this->db->lastInsertId();
-        $contentStmt = $this->db->prepare("INSERT INTO course_text(courseID,course_content) values(:courseID,:content)");
-        $contentStmt->execute([
-            ":courseID" => $courseID,
-            ":content" => $this->textContent
-        ]);
 
-        foreach($tagsID as $tagID){
-            $tagStmt = $this->db->prepare("INSERT INTO course_tag(courseID,tagID) value(:courseID,:tagID)");
-            $tagStmt->execute([
-                ":courseID" => $courseID,
-                ":tagID" => $tagID
+    public function addCourse($tagsID)
+    {
+        $this->emptyInputCheck($this->title, "The title is required");
+        $this->emptyInputCheck($this->category, "Choose a category for the course");
+        $this->emptyInputCheck($this->description, "The description should not be empty");
+        $this->emptyInputCheck($this->contentType, "Choose a type for the course");
+        $this->emptyInputCheck($this->textContent, "The content is required");
+
+        if (empty($this->errors)) {
+            $courseStmt = $this->db->prepare("INSERT INTO courses(userID,title,description,categoryID,content_type) values(:userID,:title,:description,:categoryID,:type)");
+            $courseStmt->execute([
+                ":userID" => $this->teacherID,
+                ":title" => $this->title,
+                ":description" => $this->description,
+                ":categoryID" => $this->category,
+                ":type" => $this->contentType
             ]);
+            $courseID = $this->db->lastInsertId();
+            $contentStmt = $this->db->prepare("INSERT INTO course_text(courseID,course_content) values(:courseID,:content)");
+            $contentStmt->execute([
+                ":courseID" => $courseID,
+                ":content" => $this->textContent
+            ]);
+
+            foreach ($tagsID as $tagID) {
+                $tagStmt = $this->db->prepare("INSERT INTO course_tag(courseID,tagID) value(:courseID,:tagID)");
+                $tagStmt->execute([
+                    ":courseID" => $courseID,
+                    ":tagID" => $tagID
+                ]);
+            }
         }
     }
 }
