@@ -43,7 +43,7 @@ class CourseVideo extends Course
             ]);
 
             foreach ($tagsID as $tagID) {
-                $tagStmt = $this->db->prepare("INSERT INTO course_tag(courseID,tagID) value(:courseID,:tagID)");
+                $tagStmt = $this->db->prepare("INSERT INTO course_tag(courseID,tagID) values(:courseID,:tagID)");
                 $tagStmt->execute([
                     ":courseID" => $courseID,
                     ":tagID" => $tagID
@@ -51,4 +51,18 @@ class CourseVideo extends Course
             }
         }
     }
+    public function displayCourse($courseID){
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , cv.*
+                                    FROM courses c
+                                    left JOIN category cat on c.categoryID = cat.categoryID
+                                    left join users u on c.userID = u.userID
+                                    left join course_video cv on cv.courseID = c.courseID
+                                    where c.courseID = :courseID
+                                    ");
+        $stmt->execute([
+            ":courseID" => $courseID
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+      
 }

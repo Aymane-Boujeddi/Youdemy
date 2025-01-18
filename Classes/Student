@@ -1,8 +1,43 @@
 <?php
-
+require_once "User";
 
 class Student extends User {
 
 
-    
+    public function enrollToCourse($courseID,$studentID){
+        $stmt = $this->db->prepare("INSERT INTO enrollement(courseID,userID) values(:courseID,:studentID)");
+        $stmt->execute([
+            ":courseID" => $courseID ,
+            ":studentID" => $studentID
+        ]);
+    }
+
+    public function enrolledCourses($studentID){
+        $stmt = $this->db->prepare("SELECT us.username as student , u.username as teacher , c.title , c.description , cat.category_name , c.creation_date 
+                                    FROM enrollement enr
+                                    join courses c on c.courseID = enr.courseID
+                                    join category cat on c.categoryID = cat.categoryID
+                                    join users u on u.userID = c.userID
+                                    join users us on us.userID = enr.userID
+                                    where enr.userID = :id
+                                    ");
+        $stmt->execute([
+            ":id" => $studentID
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function alreadyEnrolled($studentID,$courseID){
+        $stmt = $this->db->prepare("SELECT * FROM enrollement where userID=:userID and courseID=:courseID");
+        $stmt->execute([
+            ":courseID" => $courseID ,
+            ":userID" => $studentID
+        ]);
+
+        if($stmt->fetch(PDO::FETCH_ASSOC)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

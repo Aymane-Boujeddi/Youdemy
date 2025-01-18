@@ -2,7 +2,8 @@
 
 require_once "Connect";
 
-class Course {
+class Course
+{
 
 
 
@@ -12,27 +13,62 @@ class Course {
     protected $teacherID;
     protected $db;
     protected $errors = [];
-    
 
 
-    public function __construct($title,$category,$description,$teacherID){
+
+    public function __construct($title, $category, $description, $teacherID)
+    {
         $this->title = $title;
         $this->category = $category;
         $this->description = $description;
         $this->teacherID = $teacherID;
         $connection = new Database();
         $this->db = $connection->connect();
-
     }
-    private function validateInput($input){
+    private function validateInput($input)
+    {
         return htmlspecialchars(strip_tags($input));
     }
 
-    protected function emptyInputCheck($input,$errorMessage){
-        if(empty($input)){
-            array_push($this->errors , $errorMessage);
+    protected function emptyInputCheck($input, $errorMessage)
+    {
+        if (empty($input)) {
+            array_push($this->errors, $errorMessage);
         }
     }
 
-    public function addCourse($tagsID){}
+    public function getAllCourses()
+    {
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username
+                                    FROM courses c
+                                    left JOIN category cat on c.categoryID = cat.categoryID
+                                    left join users u on c.userID = u.userID;");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getCourseTag($courseID)
+    {
+        $stmt = $this->db->prepare("SELECT t.tag_name 
+                                from tags t
+                                join course_tag ct on t.tagID = ct.tagID
+                                where courseID=:id");
+        $stmt->execute([
+            ":id" => $courseID
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function getCourseType($courseID){
+        $stmt = $this->db->prepare("SELECT type FROM courses where courseID = :id");
+        $stmt->execute([
+            ":id" => $courseID
+        ]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function getCourseTags($courseID){
+        $stmt = $this->db->prepare("SELECT * FROM tags where courseID = :id");
+        $stmt->execute([":id" => $courseID]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function addCourse($tagsID) {}
+    public function displayCourse($courseID) {}
 }
