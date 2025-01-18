@@ -7,7 +7,7 @@ if (isset($_SESSION['id'])) {
     $teacherID = $_SESSION['id'];
 }
 $errors = [];
-if(isset($_SESSION['errors']) && !empty($_SESSION['errors'])){
+if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
     $errors = $_SESSION['errors'];
     unset($_SESSION['errors']);
 }
@@ -43,11 +43,21 @@ $courseCount = $teacher->courseCount($teacherID);
                 <h1>Youdemy</h1>
             </div>
             <div class="nav-links">
-                <a href="#add-course" class="active"><i class="fas fa-plus-circle"></i> Add Course</a>
-                <a href="#manage-courses"><i class="fas fa-tasks"></i> Manage Courses</a>
-                <a href="#statistics"><i class="fas fa-chart-bar"></i> Statistics</a>
-                <a href="#enrollments"><i class="fas fa-user-graduate"></i> Enrollments</a>
-                <a href="../Actions/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                <a class="nav-link active" onclick="setActive('#add-course')">
+                    <i class="fas fa-plus-circle"></i> Add Course
+                </a>
+                <a class="nav-link" onclick="setActive('#manage-courses')">
+                    <i class="fas fa-tasks"></i> Manage Courses
+                </a>
+                <a class="nav-link" onclick="setActive('#statistics')">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </a>
+                <a class="nav-link" onclick="setActive('#enrollments')">
+                    <i class="fas fa-user-graduate"></i> Enrollments
+                </a>
+                <a href="../Actions/logout.php" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
         </nav>
     </header>
@@ -56,26 +66,25 @@ $courseCount = $teacher->courseCount($teacherID);
         <section id="add-course" class="dashboard-section">
             <h2><i class="fas fa-plus-circle"></i> Add New Course</h2>
             <form id="newCourseForm" class="course-form" action="../Actions/addCourse.php" method="POST">
-                <?php foreach($errors as $error){
-                    
+                <?php foreach ($errors as $error) {
                 } ?>
 
                 <div class="form-group">
                     <label for="courseTitle">Course Title</label>
-                    <input type="text" id="courseTitle" name="title" >
+                    <input type="text" id="courseTitle" name="title">
                     <input type="hidden" name="id" value=<?= '"' . $teacherID . '"' ?>>
                 </div>
 
                 <div class="form-group">
                     <label for="courseDescription">Course Description</label>
-                    <textarea id="courseDescription" name="description" rows="4" ></textarea>
+                    <textarea id="courseDescription" name="description" rows="4"></textarea>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label for="courseCategory">Category</label>
-                        <select id="courseCategory" name="category" >
-                            <option value="" >Select a category</option>
+                        <select id="courseCategory" name="category">
+                            <option value="">Select a category</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value=<?= '"' . $category['categoryID'] . '"' ?>><?= $category['category_name'] ?></option>
                             <?php endforeach ?>
@@ -204,7 +213,7 @@ $courseCount = $teacher->courseCount($teacherID);
         <section id="enrollments" class="dashboard-section" style="display: none;">
             <h2><i class="fas fa-user-graduate"></i> Course Enrollments</h2>
             <div class="table-container">
-                
+
                 <table class="enrollments-table">
                     <thead>
                         <tr>
@@ -224,7 +233,7 @@ $courseCount = $teacher->courseCount($teacherID);
                             <td>Jan 15, 2024</td>
                         </tr>
 
-                       
+
                     </tbody>
                 </table>
             </div>
@@ -249,34 +258,32 @@ $courseCount = $teacher->courseCount($teacherID);
             }
         });
 
-        const navLinks = document.querySelectorAll('.nav-links a');
+        // Get all nav links and sections
+        const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.dashboard-section');
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (!this.classList.contains('logout-btn')) {
-                    e.preventDefault();
+        // Function to set active section
+        function setActive(sectionId) {
+            // Remove # from sectionId if present
+            const targetId = sectionId.replace('#', '');
 
-                    // Remove active class from all links
-                    navLinks.forEach(link => link.classList.remove('active'));
+            // Update active states
+            navLinks.forEach(l => l.classList.remove('active'));
+            sections.forEach(s => s.style.display = 'none');
 
-                    // Add active class to clicked link
-                    this.classList.add('active');
+            // Set new active section and link
+            document.getElementById(targetId).style.display = 'block';
+            document.querySelector(`[onclick*="#${targetId}"]`).classList.add('active');
 
-                    // Hide all sections
-                    sections.forEach(section => {
-                        section.style.display = 'none';
-                    });
+            // Save to localStorage
+            localStorage.setItem('activeTab', targetId);
+        }
 
-                    // Show the corresponding section
-                    const targetId = this.getAttribute('href').substring(1);
-                    document.getElementById(targetId).style.display = 'block';
-                }
-            });
+        // On page load, get active tab from localStorage or default to first tab
+        document.addEventListener('DOMContentLoaded', () => {
+            const activeTab = localStorage.getItem('activeTab') || 'add-course';
+            setActive(activeTab);
         });
-
-        // Show first section by default
-        document.getElementById('add-course').style.display = 'block';
     </script>
 </body>
 

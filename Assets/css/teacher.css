@@ -757,3 +757,13 @@ input:focus, select:focus, textarea:focus {
         justify-content: center;
     }
 }
+
+.nav-link {
+    cursor: pointer;
+}
+
+/* Optional: you might want to style the active state as well */
+.nav-link.active {
+    cursor: pointer;
+    /* your existing active styles */
+}
