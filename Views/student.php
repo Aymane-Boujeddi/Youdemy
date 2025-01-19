@@ -12,6 +12,18 @@
 session_start();
 require_once "../Classes/Student";
 $userMessage = "";
+
+if (isset($_SESSION['id']) && $_SESSION['role'] == 'admin') {
+    header("location: Views/admin.php");
+    exit();
+} elseif (isset($_SESSION['id']) && $_SESSION['role'] == 'teacher') {
+    header("location: Views/teacher.php");
+    exit();
+} elseif (!isset($_SESSION['id'])) {
+    header("location: ../index.php");
+    exit();
+}
+
 if (isset($_SESSION['id']) && $_SESSION['status'] == 'active') {
     $userMessage = "<span>Welcome, " . $_SESSION['username'] . "</span>";
 } elseif (isset($_SESSION['id']) && $_SESSION['status'] == 'inactive') {
@@ -20,7 +32,7 @@ if (isset($_SESSION['id']) && $_SESSION['status'] == 'active') {
     header("location: ../index.php");
     exit();
 }
-$student = new Student("","","","","");
+$student = new Student("", "", "", "", "");
 $enrolledCourses = $student->enrolledCourses($_SESSION['id']);
 ?>
 
@@ -37,7 +49,7 @@ $enrolledCourses = $student->enrolledCourses($_SESSION['id']);
                         <li><a href="../Actions/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                     <div class="user-info">
-                        <?= $userMessage?>
+                        <?= $userMessage ?>
                     </div>
                 </div>
             </nav>
@@ -81,22 +93,22 @@ $enrolledCourses = $student->enrolledCourses($_SESSION['id']);
         <section id="my-courses" class="dashboard-section">
             <h2><i class="fas fa-graduation-cap"></i> My Courses</h2>
             <div class="enrolled-courses">
-                <?php foreach($enrolledCourses as $course):?>
-                <div class="course-card enrolled">
-                    <div class="course-header">
-                        <h3><?= $course['title']?></h3>
-                        <span class="course-category"><?= $course['category_name']?></span>
-                    </div>
-                    <div class="course-info">
-                        <p class="instructor"><i class="fas fa-user"></i><?= $course['teacher']?></p>
-                        <p class="progress">Progress: 60%</p>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: 60%"></div>
+                <?php foreach ($enrolledCourses as $course): ?>
+                    <div class="course-card enrolled">
+                        <div class="course-header">
+                            <h3><?= $course['title'] ?></h3>
+                            <span class="course-category"><?= $course['category_name'] ?></span>
                         </div>
+                        <div class="course-info">
+                            <p class="instructor"><i class="fas fa-user"></i><?= $course['teacher'] ?></p>
+                            <p class="progress">Progress: 60%</p>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <button class="continue-btn">Continue Learning</button>
                     </div>
-                    <button class="continue-btn">Continue Learning</button>
-                </div>
-                <?php endforeach?>
+                <?php endforeach ?>
             </div>
         </section>
     </div>

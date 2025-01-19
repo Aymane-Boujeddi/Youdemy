@@ -83,8 +83,32 @@ body {
 }
 
 .logout {
-    color: #e74c3c;
+    background-color: #ef4444;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    text-decoration: none;
     margin-left: auto;
+}
+
+.logout i {
+    font-size: 16px;
+}
+
+.logout:hover {
+    background-color: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logout:active {
+    transform: translateY(0);
 }
 
 /* Main Content Area */
@@ -556,6 +580,8 @@ input:checked + .slider:before {
 
     .logout {
         margin-left: 0;
+        width: 100%;
+        justify-content: center;
     }
 
     .table-container {

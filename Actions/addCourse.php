@@ -7,7 +7,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $desciption =  $_POST['description'];
     $category = $_POST['category'];
     $type = $_POST['type'];
-    $tags = $_POST['tag'];
+    $tags = isset($_POST['tag']) ? $_POST['tag'] : [];;
     $teacherID = $_POST['id'];
     echo $teacherID;
 
@@ -27,12 +27,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $_SESSION['errors'] = $newCourse->getErrors();
         header("location: ../Views/teacher.php");
         exit();
+    }else{
+        $_SESSION['errors'] = ["The Type is required"];
+        header("location: ../Views/teacher.php");
+        exit();
     }
-    // else{
-    //     $_SESSION['errors'] = "The category is required";
-    //     header("location: ../Views/teacher.php");
-    //     exit();
-    // }
    
     
 }

@@ -26,6 +26,10 @@ class CourseText extends Course
         $this->emptyInputCheck($this->description, "The description should not be empty");
         $this->emptyInputCheck($this->contentType, "Choose a type for the course");
         $this->emptyInputCheck($this->textContent, "The content is required");
+        if(empty($tagsID)){
+            array_push($this->errors, "Please add a tag to the course (required)");
+        }
+        
 
         if (empty($this->errors)) {
             $courseStmt = $this->db->prepare("INSERT INTO courses(userID,title,description,categoryID,content_type) values(:userID,:title,:description,:categoryID,:type)");

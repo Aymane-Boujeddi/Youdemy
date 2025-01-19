@@ -69,6 +69,22 @@ class Course
         $stmt->execute([":id" => $courseID]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function pagination($start,$rows){
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username
+                                    FROM courses c
+                                    left JOIN category cat on c.categoryID = cat.categoryID
+                                    left join users u on c.userID = u.userID
+                                    LIMIT $start , $rows
+                                    ");
+
+        $stmt->execute( );
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function countCourses() {
+        $stmt = $this->db->prepare("SELECT COUNT(*) FROM courses");
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
     public function addCourse($tagsID) {}
     public function displayCourse($courseID) {}
 }

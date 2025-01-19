@@ -9,12 +9,22 @@
             </div>
         </nav>
 
-        <div class="search-section">
-            <h2>Expand Your Knowledge</h2>
-            <p>Learn from thousands of experienced instructors</p>
-            <div class="search-bar">
-                <input type="text" placeholder="What do you want to learn today?">
-                <button><i class="fas fa-search"></i> Search</button>
+        <div class="intro-section">
+        <h2>Welcome to Youdemy</h2>
+        <p>Your Gateway to Knowledge and Growth</p>
+        <div class="intro-features">
+            <div class="feature">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Expert-Led Courses</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-certificate"></i>
+                <span>Earn Certificates</span>
+            </div>
+            <div class="feature">
+                <i class="fas fa-clock"></i>
+                <span>Learn at Your Pace</span>
             </div>
         </div>
+    </div>
     </header>
