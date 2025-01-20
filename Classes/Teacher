@@ -3,12 +3,13 @@ require_once "User";
 class Teacher extends User {
 
     public function displayCourses($teacherID){
-        $stmt = $this->db->prepare("SELECT  vid.* , doc.* , cat.* , c.*  
+        $stmt = $this->db->prepare("SELECT   cat.* , c.*  , count(enr.userID) as students
                                     FROM courses c
-									LEFT JOIN course_video vid on c.courseID = vid.courseID
-                                    LEFT JOIN course_text doc on c.courseID = doc.courseID 
-                                    left JOIN category cat on c.categoryID = cat.categoryID
-                                    WHERE c.userID = :id");
+                                    JOIN category cat on c.categoryID = cat.categoryID
+                                    left join enrollement enr on enr.courseID = c.courseID
+                                    WHERE c.userID = :id
+                                    group by c.courseID
+                                    ");
         $stmt->execute([
             ":id" => $teacherID
         ]);
@@ -20,6 +21,24 @@ class Teacher extends User {
             ":id" => $teacherID
         ]);
        return $stmt->fetch();
+    }
+    public function courseOwner($teacherID,$courseID){
+        $stmt = $this->db->prepare("SELECT * 
+                                    FROM courses c 
+                                    JOIN users u on u.courseID = c.courseID
+                                    where c.userID = :userID and c.courseID = :courseID
+                                    ");
+        $stmt->execute([
+            ":userID" => $teacherID , 
+            ":courseID" => $courseID
+        ]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function removeCourseEnrollement($enrollementID){
+        $stmt = $this->db->prepare("DELETE FROM enrollement where enrollementID = :enrollementID");
+        $stmt->execute([
+            ":enrollementID" => $enrollementID
+        ]);
     }
     
 }

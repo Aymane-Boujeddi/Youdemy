@@ -2,6 +2,7 @@
 require_once "../Classes/Teacher";
 require_once "../Classes/Category";
 require_once "../Classes/Tags";
+require_once "../Classes/Course";
 session_start();
 if (isset($_SESSION['id'])) {
     $teacherID = $_SESSION['id'];
@@ -11,13 +12,13 @@ if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
     $errors = $_SESSION['errors'];
     unset($_SESSION['errors']);
 }
-if(isset($_SESSION['id']) && $_SESSION['role'] == 'student'){
+if (isset($_SESSION['id']) && $_SESSION['role'] == 'student') {
     header("location: ./student.php");
     exit();
-}elseif(isset($_SESSION['id']) && $_SESSION['role'] == 'admin'){
+} elseif (isset($_SESSION['id']) && $_SESSION['role'] == 'admin') {
     header("location: ./admin.php");
     exit();
-}elseif(!isset($_SESSION['id'])){
+} elseif (!isset($_SESSION['id'])) {
     header("location: ../index.php");
     exit();
 }
@@ -28,6 +29,9 @@ $tags = $tag->displayTags();
 $teacher = new teacher("", "", "", "", "");
 $courses = $teacher->displayCourses($teacherID);
 $courseCount = $teacher->courseCount($teacherID);
+$courseInstance = new Course("", "", "", "", "", "");
+$enrollements = $courseInstance->enrollements($teacherID);
+
 
 
 
@@ -71,7 +75,7 @@ $courseCount = $teacher->courseCount($teacherID);
     </header>
 
     <main class="dashboard-main">
-        <section id="add-course" class="dashboard-section">
+        <section id="add-course" class="dashboard-section" style="display: none;">
             <?php if ($_SESSION['status'] == 'active'): ?>
                 <h2><i class='fas fa-plus-circle'></i> Add New Course</h2>
                 <form id='newCourseForm' class='course-form' action='../Actions/addCourse.php' method='POST'>
@@ -152,7 +156,7 @@ $courseCount = $teacher->courseCount($teacherID);
 
         </section>
 
-        <section id="manage-courses" class="dashboard-section" style="display: none;">
+        <section id="manage-courses" class="dashboard-section">
             <h2><i class="fas fa-tasks"></i> Manage Courses</h2>
             <div class="table-container">
                 <div class="table-header">
@@ -171,22 +175,21 @@ $courseCount = $teacher->courseCount($teacherID);
                     <tbody>
                         <?php foreach ($courses as $course): ?>
 
-                            
                             <tr>
                                 <td><?= $course['title'] ?></td>
                                 <td><?= $course['category_name'] ?></td>
                                 <td><?= $course['content_type'] ?></td>
-                                <td></td>
+                                <td><?= $course['students'] ?></td>
                                 <td class="action-buttons">
-                                    <button class="view-btn" title="View Details">
-                                        <i class="fas fa-eye"></i>
-                                    </button>   
-                                    <a href="./modification.php?courseID=<?=$course['courseID']?>"><button class="edit-btn" title="Edit Course">
-                                        <i class="fas fa-edit"></i>
-                                    </button></a>
-                                    <button class="delete-btn" title="Delete Course">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <a href="courseDetails.php?ID=<?= $course['courseID'] ?>"><button class="view-btn" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </button> </a>
+                                    <a href="./modification.php?courseID=<?= $course['courseID'] ?>"><button class="edit-btn" title="Edit Course">
+                                            <i class="fas fa-edit"></i>
+                                        </button></a>
+                                    <a href="../Actions/deleteCourse.php?courseID=<?= $course['courseID'] ?>"><button class="delete-btn" title="Delete Course">
+                                            <i class="fas fa-trash"></i>
+                                        </button></a>
                                 </td>
                             </tr>
                         <?php endforeach ?>
@@ -237,19 +240,27 @@ $courseCount = $teacher->courseCount($teacherID);
                             <th>Student Name</th>
                             <th>Course</th>
                             <th>Enrollment Date</th>
+                            <th>Actions</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>
-                                <div class="student-info">
-                                    <span>John Doe</span>
-                                </div>
-                            </td>
-                            <td>Web Development Basics</td>
-                            <td>Jan 15, 2024</td>
-                        </tr>
-
+                        <?php foreach ($enrollements as $enrollement): ?>
+                            <tr>
+                                <td>
+                                    <div class="student-info">
+                                        <span><?= $enrollement['username'] ?></span>
+                                    </div>
+                                </td>
+                                <td><?= $enrollement['title'] ?></td>
+                                <td><?= $enrollement['enrollement_date'] ?></td>
+                                <td class="action-buttons">
+                                    <a href="../Actions/removeEnrollement.php?ID=<?= $enrollement['enrollementID'] ?>"><button class="delete-btn" title="Delete Course">
+                                            <i class="fas fa-trash"></i>
+                                        </button></a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
 
                     </tbody>
                 </table>

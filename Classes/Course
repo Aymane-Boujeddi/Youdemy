@@ -57,15 +57,17 @@ class Course
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function getCourseType($courseID){
+    public function getCourseType($courseID)
+    {
         $stmt = $this->db->prepare("SELECT content_type FROM courses where courseID = :id");
         $stmt->execute([
             ":id" => $courseID
         ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-   
-    public function pagination($start,$rows){
+
+    public function pagination($start, $rows)
+    {
         $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username
                                     FROM courses c
                                     left JOIN category cat on c.categoryID = cat.categoryID
@@ -73,47 +75,79 @@ class Course
                                     LIMIT $start , $rows
                                     ");
 
-        $stmt->execute( );
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function countCourses() {
+    public function searchCourses($searchInput){
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username
+                                    FROM courses c
+                                    left JOIN category cat on c.categoryID = cat.categoryID
+                                    left join users u on c.userID = u.userID
+                                    where c.title like :search");
+        $stmt->execute([
+            ":search" => "%" . $searchInput . "%"
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function countCourses()
+    {
         $stmt = $this->db->prepare("SELECT COUNT(*) FROM courses");
         $stmt->execute();
         return $stmt->fetchColumn();
     }
-    public function updateCourseType($courseID,$type){
+    public function updateCourseType($courseID, $type)
+    {
         $stmt = $this->db->prepare("UPDATE courses SET content_type = :type where courseID = :courseID");
         $stmt->execute([
             ":type" => $type,
             ":courseID" => $courseID
         ]);
-       
-        
     }
-    public function updateCourseInfo($courseID,$type,$title,$description,$category,$tags){
+    public function updateCourseInfo($courseID, $type, $title, $description, $category, $tags)
+    {
         $infoStmt = $this->db->prepare("UPDATE courses SET title=:title , description=:description , categoryID=:categoryID , content_type=:type where courseID=:courseID ");
         $infoStmt->execute([
-            ":title" => $title , 
-            ":description" => $description ,
-            ":categoryID" => $category ,
-            ":type" => $type ,
+            ":title" => $title,
+            ":description" => $description,
+            ":categoryID" => $category,
+            ":type" => $type,
             ":courseID" => $courseID
         ]);
 
         $deleteTagsStmt = $this->db->prepare("DELETE FROM course_tag where courseID=:courseID");
         $deleteTagsStmt->execute([":courseID" => $courseID]);
 
-        foreach($tags as $tag){
+        foreach ($tags as $tag) {
             $addNewTagsStmt = $this->db->prepare("INSERT INTO course_tag(tagID,courseID) values(:tagID,:courseID)");
             $addNewTagsStmt->execute([
-                ":tagID" => $tag , 
+                ":tagID" => $tag,
                 ":courseID" => $courseID
             ]);
         }
     }
+    public function deleteCourse($courseID)
+    {
+        $stmt = $this->db->prepare("DELETE FROM courses where courseID = :courseID");
+        $stmt->execute([
+            ":courseID" => $courseID
+        ]);
+    }
+    public function enrollements($teacherID)
+    {
+        $stmt = $this->db->prepare("SELECT enr.* , u.username ,c.title
+                                    From enrollement enr 
+                                    join users u on enr.userID = u.userID
+                                    join courses c on c.courseID = enr.courseID
+                                    where c.userID = :userID;
+                                        ");
+        $stmt->execute([
+            ":userID" => $teacherID
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function addCourse($tagsID) {}
     public function displayCourse($courseID) {}
     public function deleteContent($courseID) {}
-    public function updateContent($courseID,$content){}
-    public function addCourseContent($content,$courseID){}
+    public function updateContent($courseID, $content) {}
+    public function addCourseContent($content, $courseID) {}
 }

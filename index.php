@@ -49,6 +49,7 @@
 
 
     <main>
+ 
         <?= $enrollError ?>
         <div class="courses-container" id="courses">
             <?php foreach ($courses as $course): ?>

@@ -15,7 +15,17 @@ require_once "../Classes/CourseText";
 require_once "../Classes/CourseVideo";
 require_once "../Classes/Category";
 require_once "../Classes/Tags";
-if ($_SERVER['REQUEST_METHOD'] == "GET") {
+
+
+if ($_SERVER['REQUEST_METHOD'] == "GET" ) {
+    if(isset($_SESSION['id']) && $_SESSION['role'] != "admin" && $_SESSION['role'] != "teacher"){
+        header("location: ../index.php");
+        exit();
+    
+    }elseif(!isset($_SESSION['id'])){
+        header("location: ../index.php");
+        exit();
+    }
     $courseID = $_GET['courseID'];
     $courseInstance = new Course("", "", "", "", "");
     $tagsInstance = new Tags("");
@@ -27,15 +37,16 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
     if ($courseType['content_type'] === "video") {
         $courseVideo = new CourseVideo("", "", "", "", "", "");
         $courseInfo = $courseVideo->displayCourse($courseID);
-        var_dump($courseInfo);
+        // var_dump($courseInfo);
         $courseTags = $courseInstance->getCourseTag($courseID);
     } elseif ($courseType['content_type'] === "document") {
         $courseText = new CourseText("", "", "", "", "", "");
         $courseInfo = $courseText->displayCourse($courseID);
-        var_dump($courseInfo);
+        // var_dump($courseInfo);
         
         $courseTags = $courseInstance->getCourseTag($courseID);
     }
+    
     $_SESSION['course_type'] = $courseInfo['content_type'];
  
    

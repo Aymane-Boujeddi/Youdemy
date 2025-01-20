@@ -18,15 +18,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['course_type'])){
     $courseInstance = new Course("","","","","","");
     $redirectPage = $_SESSION['role'] . ".php";
 
-    echo $title . "title". "<br>";
-    echo $description . "description". "<br>";
-    echo $category . "category". "<br>";
-    echo $content_text . "content_text". "<br>";
-    echo $content_video .  "content_video" ."<br>";
-    echo $type . "type". "<br>";
-    echo $userID . "userID". "<br>";
-    echo $courseID . "courseID". "<br>";
-    var_dump($tags);
+    // echo $title . "title". "<br>";
+    // echo $description . "description". "<br>";
+    // echo $category . "category". "<br>";
+    // echo $content_text . "content_text". "<br>";
+    // echo $content_video .  "content_video" ."<br>";
+    // echo $type . "type". "<br>";
+    // echo $userID . "userID". "<br>";
+    // echo $courseID . "courseID". "<br>";
+    // var_dump($tags);
 //    if($type == "video"){
 //     if($_SESSION['course_type'] != $type ){
 //         $deleteContent = $courseVideoInstance->deleteContent($courseID);
@@ -63,8 +63,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION['course_type'])){
         
 //     }
 //    }
-// Validate input (ensure proper data types, sanitize user input, etc.)
-// Example: $courseID = intval($courseID);
+
 
 
 if ($type == "video") {

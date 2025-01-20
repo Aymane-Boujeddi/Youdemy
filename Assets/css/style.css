@@ -21,6 +21,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .logo h1 {
@@ -113,67 +115,42 @@ body {
     display: flex;
     justify-content: center;
     padding: 3rem 0 5rem 0;
-    background-color: #ffffff;
-    border-top: 1px solid #e2e8f0;
     margin-top: 2rem;
-    width: 100%;
 }
 
 .pagination {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin: 0 auto;
-    padding: 0;
-}
-
-.pagination li {
-    list-style: none;
+    background-color: white;
+    padding: 0.5rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .pagination a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 2.75rem;
-    height: 2.75rem;
-    padding: 0 1rem;
-    font-size: 0.925rem;
-    font-weight: 500;
-    color: #475569;
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    color: #4b5563;
     text-decoration: none;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
 
-.pagination a:hover {
+.pagination a:hover:not([disabled]) {
     background-color: #3b82f6;
     color: white;
-    border-color: #3b82f6;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .pagination .active {
     background-color: #3b82f6;
     color: white;
-    border-color: #3b82f6;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .pagination .disabled {
-    background-color: #f1f5f9;
-    color: #94a3b8;
+    opacity: 0.5;
     cursor: not-allowed;
     pointer-events: none;
-}
-
-.pagination .prev-btn,
-.pagination .next-btn {
-    padding: 0 1.25rem;
-    font-weight: 600;
 }
 
 .course-card {
@@ -490,6 +467,7 @@ body {
     gap: 4rem;
     max-width: 1000px;
     margin: 0 auto;
+    flex-wrap: wrap;
 }
 
 .feature {
@@ -559,52 +537,240 @@ body {
     .courses-container {
         grid-template-columns: repeat(4, 1fr);
         padding: 2rem;
+        gap: 1.2rem;
     }
 }
 
 @media (max-width: 1280px) {
     .courses-container {
         grid-template-columns: repeat(3, 1fr);
+        padding: 1.5rem;
     }
 }
 
 @media (max-width: 1024px) {
     .courses-container {
         grid-template-columns: repeat(2, 1fr);
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+
+    .course-card img {
+        height: 160px;
+    }
+
+    .course-info h2 {
+        font-size: 1rem;
+    }
+
+    .course-info {
+        padding: 1rem;
     }
 }
 
 @media (max-width: 768px) {
     .navbar {
-        padding: 1rem 2rem;
-    }
-
-    .courses-container {
-        grid-template-columns: repeat(1, 1fr);
         padding: 1rem;
-    }
-
-    .pagination-wrapper {
-        padding: 2rem 0 4rem 0;
-    }
-    
-    .pagination {
-        flex-wrap: wrap;
         justify-content: center;
-        gap: 0.5rem;
+        text-align: center;
     }
-}
 
-@media (max-width: 640px) {
-    .navbar {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
+    .logo {
+        width: 100%;
+        margin-bottom: 1rem;
     }
 
     .auth-buttons {
         width: 100%;
         justify-content: center;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .auth-buttons button {
+        min-width: 120px;
+    }
+
+    .courses-container {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .course-card {
+        border-radius: 0.5rem;
+    }
+
+    .course-info {
+        padding: 0.8rem;
+    }
+
+    .category {
+        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .tags span {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+
+    .instructor {
+        font-size: 0.8rem;
+    }
+
+    .description {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 2;
+    }
+
+    .pagination {
+        padding: 0.3rem;
+        gap: 0.5rem;
+    }
+
+    .pagination a {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.9rem;
+    }
+
+    .intro-section {
+        padding: 3rem 1rem;
+    }
+
+    .intro-section h2 {
+        font-size: 2rem;
+    }
+
+    .intro-section p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .intro-features {
+        gap: 1.5rem;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+@media (max-width: 640px) {
+    .courses-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .course-card {
+        max-width: 100%;
+    }
+
+    .course-card img {
+        height: 200px;
+    }
+
+    .auth-buttons button {
+        width: 100%;
+        justify-content: center;
+        padding: 0.8rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.4rem;
+    }
+
+    .pagination a {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .prev-btn, .next-btn {
+        width: 100%;
+        text-align: center;
+        margin: 0.2rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 0.8rem;
+    }
+
+    .logo h1 {
+        font-size: 1.5rem;
+    }
+
+    .course-info h2 {
+        font-size: 0.95rem;
+    }
+
+    .course-card img {
+        height: 180px;
+    }
+
+    .tags {
+        gap: 0.3rem;
+    }
+
+    .enroll-button,
+    .sign-up-now,
+    .banned-button {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .pagination {
+        padding: 0.2rem;
+    }
+
+    .pagination a {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .auth-buttons button {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .intro-section {
+        padding: 2rem 1rem;
+    }
+
+    .intro-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .intro-features {
+        gap: 1.2rem;
+    }
+
+    .feature i {
+        font-size: 1.8rem;
+    }
+
+    .feature span {
+        font-size: 0.9rem;
+    }
+
+    /* Specific styles for userHeader buttons */
+    .profile-btn,
+    .dashboard-btn,
+    .logout-btn {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.8rem;
+    }
+
+    .profile-btn i,
+    .dashboard-btn i,
+    .logout-btn i {
+        font-size: 0.9rem;
     }
 }
 
@@ -700,9 +866,14 @@ textarea {
 }
 
 .error-message {
+    text-align: center;
     color: #ef4444;
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 800px;
+    background-color: #fef2f2;
+    border-radius: 8px;
+    border: 1px solid #fee2e2;
 }
 
 /* Upload content styles */
@@ -736,19 +907,125 @@ textarea {
     display: none;
 }
 
+/* Search Page Container */
+.search-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Enhanced Search Container */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem auto;
+    padding: 0 2rem;
+    max-width: 800px;
+    position: relative;
+}
+
+.search-container form {
+    width: 100%;
+    position: relative;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem 3.5rem 1rem 1.5rem;
+    font-size: 1rem;
+    color: #1e293b;
+    background-color: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.1);
+}
+
+.search-button {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.75rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-button:hover {
+    background-color: #2563eb;
+    transform: translateY(-50%) scale(1.05);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
-    .modification-form {
-        margin: 2rem;
-        padding: 1.5rem;
+    .search-container {
+        margin: 2rem auto;
+        padding: 0 1rem;
     }
 
-    .form-actions {
-        flex-direction: column;
+    .courses-container {
+        grid-template-columns: 1fr;
+        padding: 1rem;
     }
 
-    .submit-btn,
-    .cancel-btn {
-        width: 100%;
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .search-input {
+        padding: 0.875rem 3rem 0.875rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    .search-button {
+        padding: 0.625rem;
+    }
+}
+
+/* Responsive Design for Headers */
+@media (max-width: 1200px) {
+    .navbar {
+        padding: 1.25rem 2rem;
+    }
+
+    .intro-features {
+        gap: 3rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar {
+        padding: 1rem 1.5rem;
+    }
+
+    .intro-section {
+        padding: 4rem 1.5rem;
+    }
+
+    .intro-section h2 {
+        font-size: 2.5rem;
+    }
+
+    .intro-features {
+        gap: 2rem;
     }
 } 
