@@ -12,10 +12,10 @@ if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
     unset($_SESSION['errors']);
 }
 if(isset($_SESSION['id']) && $_SESSION['role'] == 'student'){
-    header("location: Views/student.php");
+    header("location: ./student.php");
     exit();
 }elseif(isset($_SESSION['id']) && $_SESSION['role'] == 'admin'){
-    header("location: Views/admin.php");
+    header("location: ./admin.php");
     exit();
 }elseif(!isset($_SESSION['id'])){
     header("location: ../index.php");
@@ -28,6 +28,7 @@ $tags = $tag->displayTags();
 $teacher = new teacher("", "", "", "", "");
 $courses = $teacher->displayCourses($teacherID);
 $courseCount = $teacher->courseCount($teacherID);
+
 
 
 ?>
@@ -169,6 +170,8 @@ $courseCount = $teacher->courseCount($teacherID);
                     </thead>
                     <tbody>
                         <?php foreach ($courses as $course): ?>
+
+                            
                             <tr>
                                 <td><?= $course['title'] ?></td>
                                 <td><?= $course['category_name'] ?></td>
@@ -177,10 +180,10 @@ $courseCount = $teacher->courseCount($teacherID);
                                 <td class="action-buttons">
                                     <button class="view-btn" title="View Details">
                                         <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="edit-btn" title="Edit Course">
+                                    </button>   
+                                    <a href="./modification.php?courseID=<?=$course['courseID']?>"><button class="edit-btn" title="Edit Course">
                                         <i class="fas fa-edit"></i>
-                                    </button>
+                                    </button></a>
                                     <button class="delete-btn" title="Delete Course">
                                         <i class="fas fa-trash"></i>
                                     </button>

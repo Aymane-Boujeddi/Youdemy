@@ -14,10 +14,10 @@ require_once "../Classes/Student";
 $userMessage = "";
 
 if (isset($_SESSION['id']) && $_SESSION['role'] == 'admin') {
-    header("location: Views/admin.php");
+    header("location: /admin.php");
     exit();
 } elseif (isset($_SESSION['id']) && $_SESSION['role'] == 'teacher') {
-    header("location: Views/teacher.php");
+    header("location: /teacher.php");
     exit();
 } elseif (!isset($_SESSION['id'])) {
     header("location: ../index.php");

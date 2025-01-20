@@ -606,4 +606,149 @@ body {
         width: 100%;
         justify-content: center;
     }
+}
+
+/* Form Styling */
+.modification-form {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modification-form h2 {
+    font-size: 1.75rem;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.course-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+label {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+input, select, textarea {
+    padding: 0.8rem;
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 2rem;
+}
+
+.submit-btn,
+.cancel-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.submit-btn:hover {
+    background-color: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-btn {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+.cancel-btn:hover {
+    background-color: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+/* Upload content styles */
+.content-upload {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.upload-box {
+    border: 2px dashed #e9ecef;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: #3498db;
+    background-color: #f8f9fa;
+}
+
+.upload-box i {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+}
+
+.upload-box input[type="file"] {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modification-form {
+        margin: 2rem;
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+    }
 } 

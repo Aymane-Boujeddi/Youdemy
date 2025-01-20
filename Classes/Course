@@ -48,27 +48,23 @@ class Course
     }
     public function getCourseTag($courseID)
     {
-        $stmt = $this->db->prepare("SELECT t.tag_name 
+        $stmt = $this->db->prepare("SELECT t.tag_name , t.tagID
                                 from tags t
                                 join course_tag ct on t.tagID = ct.tagID
-                                where courseID=:id");
+                                where ct.courseID=:id");
         $stmt->execute([
             ":id" => $courseID
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function getCourseType($courseID){
-        $stmt = $this->db->prepare("SELECT type FROM courses where courseID = :id");
+        $stmt = $this->db->prepare("SELECT content_type FROM courses where courseID = :id");
         $stmt->execute([
             ":id" => $courseID
         ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function getCourseTags($courseID){
-        $stmt = $this->db->prepare("SELECT * FROM tags where courseID = :id");
-        $stmt->execute([":id" => $courseID]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+   
     public function pagination($start,$rows){
         $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username
                                     FROM courses c
@@ -85,6 +81,39 @@ class Course
         $stmt->execute();
         return $stmt->fetchColumn();
     }
+    public function updateCourseType($courseID,$type){
+        $stmt = $this->db->prepare("UPDATE courses SET content_type = :type where courseID = :courseID");
+        $stmt->execute([
+            ":type" => $type,
+            ":courseID" => $courseID
+        ]);
+       
+        
+    }
+    public function updateCourseInfo($courseID,$type,$title,$description,$category,$tags){
+        $infoStmt = $this->db->prepare("UPDATE courses SET title=:title , description=:description , categoryID=:categoryID , content_type=:type where courseID=:courseID ");
+        $infoStmt->execute([
+            ":title" => $title , 
+            ":description" => $description ,
+            ":categoryID" => $category ,
+            ":type" => $type ,
+            ":courseID" => $courseID
+        ]);
+
+        $deleteTagsStmt = $this->db->prepare("DELETE FROM course_tag where courseID=:courseID");
+        $deleteTagsStmt->execute([":courseID" => $courseID]);
+
+        foreach($tags as $tag){
+            $addNewTagsStmt = $this->db->prepare("INSERT INTO course_tag(tagID,courseID) values(:tagID,:courseID)");
+            $addNewTagsStmt->execute([
+                ":tagID" => $tag , 
+                ":courseID" => $courseID
+            ]);
+        }
+    }
     public function addCourse($tagsID) {}
     public function displayCourse($courseID) {}
+    public function deleteContent($courseID) {}
+    public function updateContent($courseID,$content){}
+    public function addCourseContent($content,$courseID){}
 }
