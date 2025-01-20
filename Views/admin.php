@@ -15,13 +15,26 @@
     require_once "../Classes/Render";
     require_once "../Classes/Category";
     require_once "../Classes/Tags";
-    $admin = new Admin("", "", "", "", "");
-    $pendingTeachers = $admin->displayPendingTeacher();
-    $Users = $admin->displayUsers();
-    $categroyInst = new Category("");
-    $categories = $categroyInst->displayGategories();
-    $tagInst = new Tags("");
-    $tags = $tagInst->displayTags();
+    session_start();
+    if (isset($_SESSION['id']) && $_SESSION['role'] == 'student') {
+        header("location: Views/student.php");
+        exit();
+    } elseif (isset($_SESSION['id']) && $_SESSION['role'] == 'teacher') {
+        header("location: Views/teacher.php");
+        exit();
+    } elseif (!isset($_SESSION['id'])) {
+        header("location: ../index.php");
+        exit();
+    }
+    $adminInstance = new Admin("", "", "", "", "");
+    $pendingTeachers = $adminInstance->displayPendingTeacher();
+    $Users = $adminInstance->displayUsers();
+    $categroyInstance = new Category("");
+    $categories = $categroyInstance->displayGategories();
+    $tagInstance = new Tags("");
+    $tags = $tagInstance->displayTags();
+    $courses = $adminInstance->getCoursesForAdmin();
+
     ?>
     <header>
         <nav class="navbar">
@@ -51,14 +64,14 @@
                         <i class="fas fa-tags"></i>
                         <span>Tags</span>
                     </li>
-                    <li data-tab="statistics">
+                    <li data-tab="statistics" class="active">
                         <i class="fas fa-chart-bar"></i>
                         <span>Statistics</span>
                     </li>
-                    <li class="logout">
+                    <a href="../Actions/logout.php" class="logout">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Logout</span>
-                    </li>
+                    </a>
                 </ul>
             </div>
         </nav>
@@ -144,19 +157,21 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Web Development Basics</td>
-                            <td>John Doe</td>
-                            <td>Programming</td>
-                            <td>150</td>
-                            <td class="actions">
-                                <button class="view-btn"><i class="fas fa-eye"></i></button>
-                                <button class="edit-btn"><i class="fas fa-edit"></i></button>
-                                <button class="delete-btn"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <?php foreach ($courses as $course): ?>
+                        <tbody>
+                            <tr>
+                                <td><?= $course['title'] ?></td>
+                                <td><?= $course['username'] ?></td>
+                                <td><?= $course['category_name'] ?></td>
+                                <td><?= $course['students'] ?></td>
+                                <td class="actions">
+                                    <button class="view-btn"><i class="fas fa-eye"></i></button>
+                                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    <?php endforeach ?>
                 </table>
             </div>
         </section>
@@ -329,7 +344,7 @@
             </div>
         </div>
 
-        <section class="content-section" id="statistics">
+        <section class="content-section active" id="statistics">
             <h2>Platform Statistics</h2>
 
             <div class="stats-cards">

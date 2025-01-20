@@ -11,98 +11,133 @@
 
 <body>
     <?php
+    require_once "Classes/Course";
     session_start();
-    if(isset($_SESSION['id'])){
+    $button = "";
+    $courseID = "";
+    $teacherID = "";
+    $enrollError = "";
+    if (isset($_SESSION['id'])) {
         require_once "Views/userHeader.php";
-    }else{
+        $button = "<a href='Action/enrollCourse.php?courseID=" . $courseID . "&userID=" . $teacherID .  "'><button class='enroll-button'>Enroll Now</button></a>";
+    } else {
+        $button = "<a href='Views/register.php'><button class='sign-up-now'>Sign Up Now</button></a>";
         require_once "Views/header.php";
     }
+    if (isset($_SESSION['enroll_errors'])) {
+        $enrollError = "<p>" . $_SESSION['enroll_errors'] . "</p>";
+        unset($_SESSION['enroll_errors']);
+    }
+
+    $newCourse = new Course("", "", "", "", "");
+    if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['start'])) {
+        $start = $_GET['start'];
+        $courses = $newCourse->pagination($start, 4);
+    } else {
+        $courses = $newCourse->pagination(1, 4);
+    }
+    $total_rows = $newCourse->countCourses();
+    $rows_per_page = 4;
+    $total_pages = ceil($total_rows / $rows_per_page);
+
+    $current_page = isset($_GET['start']) && is_numeric($_GET['start']) && $_GET['start'] > 0 ? (int)$_GET['start'] : 1;
+
+    $start = ($current_page - 1) * $rows_per_page;
+
     ?>
 
-        
+
 
     <main>
-        <div class="courses-container">
-            <div class="course-card">
-                <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" alt="Web Development Course">
-                <div class="course-info">
-                    <h2>Advanced Web Development Bootcamp</h2>
-                    <div class="category">Development</div>
-                    <div class="tags">
-                        <span>React</span>
-                        <span>Node.js</span>
-                        <span>MongoDB</span>
-                    </div>
-                    <p class="instructor">By Sarah Johnson</p>
-                    <p class="description">Master modern web development with this comprehensive full-stack course.</p>
-                </div>
-            </div>
+        <?= $enrollError ?>
+        <div class="courses-container" id="courses">
+            <?php foreach ($courses as $course): ?>
+                <div class="course-card">
+                    <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6" alt="Web Development Course">
+                    <div class="course-info">
+                        <h2><?= $course['title'] ?></h2>
+                        <div class="category"><?= $course['title'] ?></div>
+                        <div class="tags">
+                            <?php $getTags = new Course("", "", "", "", "");
+                            $tags = $getTags->getCourseTag($course['courseID']);
+                            foreach ($tags as $tag) {
+                                echo "<span>" . $tag['tag_name'] . "</span>";
+                            }
+                            ?>
 
-            <div class="course-card">
-                <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713" alt="Python Course">
-                <div class="course-info">
-                    <h2>Python for Data Science</h2>
-                    <div class="category">Data Science</div>
-                    <div class="tags">
-                        <span>Python</span>
-                        <span>Pandas</span>
-                        <span>NumPy</span>
-                    </div>
-                    <p class="instructor">By Michael Chen</p>
-                    <p class="description">Learn Python programming with focus on data analysis and visualization.</p>
-                </div>
-            </div>
 
-            <div class="course-card">
-                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692" alt="UI Design Course">
-                <div class="course-info">
-                    <h2>UI/UX Design Masterclass</h2>
-                    <div class="category">Design</div>
-                    <div class="tags">
-                        <span>Figma</span>
-                        <span>Adobe XD</span>
-                        <span>UI Design</span>
-                    </div>
-                    <p class="instructor">By Emma Davis</p>
-                    <p class="description">Create beautiful and functional user interfaces with modern design principles.</p>
-                </div>
-            </div>
 
-            <div class="course-card">
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5" alt="Cybersecurity Course">
-                <div class="course-info">
-                    <h2>Cybersecurity Fundamentals</h2>
-                    <div class="category">Security</div>
-                    <div class="tags">
-                        <span>Network</span>
-                        <span>Security</span>
-                        <span>Ethical Hacking</span>
+                        </div>
+                        <p class="instructor"><?= $course['username'] ?></p>
+                        <p class="description"><?= $course['description'] ?></p>
+                        <?php
+                        $teacherID = $course['userID'];
+                        $courseID = $course['courseID'];
+                        if (isset($_SESSION['id']) && $_SESSION['status'] == 'active') {
+                            echo "<a href='Actions/enrollCourse.php?courseID=" . $courseID . "&userID=" . $_SESSION['id'] .  "'><button class='enroll-button'>Enroll Now</button></a>";
+                        } elseif (isset($_SESSION['id']) && $_SESSION['status'] == 'inactive') {
+                            echo "<a href='Actions/enrollCourse.php?courseID=" . $courseID . "&userID=" . $_SESSION['id'] .  "'><button class='banned-button'>You are banned</button></a>";
+                        } else {
+                            echo "<a href='Views/register.php'><button class='sign-up-now'>Sign Up Now</button></a>";
+                        }
+                        ?>
                     </div>
-                    <p class="instructor">By Alex Thompson</p>
-                    <p class="description">Learn essential cybersecurity concepts and protect against digital threats.</p>
                 </div>
-            </div>
+            <?php endforeach ?>
+
+            
         </div>
+        <div class="pagination-wrapper">
 
-        <div class="pagination">
-            <button class="prev">Previous</button>
-            <div class="page-numbers">
-                <span class="active">1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>4</span>
-            </div>
-            <button class="next">Next</button>
-        </div>
-        
-    </div>
 
+            <div class="pagination">
+                <a href="?start=<?= $current_page - 1 ?>#courses" class="prev-btn" <?= $current_page <= 1 ? 'disabled' : '' ?>>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </a>
     
-       
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?start=<?= $i ?>#courses" class="<?= $i == $current_page ? 'active' : '' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+    
+                <a href="?start=<?= $current_page + 1 ?>#courses" class="next-btn" <?= $current_page >= $total_pages ? 'disabled' : '' ?>>
+                    Next <i class="fas fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+
+
+
     </main>
 
-   
-   
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentPage = parseInt(urlParams.get('start')) || 1;
+
+            const paginationLinks = document.querySelectorAll('.pagination a');
+
+            paginationLinks.forEach(link => {
+                if (!link.classList.contains('prev-btn') && !link.classList.contains('next-btn')) {
+                    const pageNum = parseInt(link.getAttribute('href').split('=')[1]);
+                    if (pageNum === currentPage) {
+                        link.classList.add('active');
+                    }
+                }
+
+                if (link.classList.contains('prev-btn') && currentPage <= 1) {
+                    link.classList.add('disabled');
+                }
+                if (link.classList.contains('next-btn') && currentPage >= <?= $total_pages ?>) {
+                    link.classList.add('disabled');
+                }
+            });
+        });
+    </script>
+
+
+
 </body>
 
 </html>

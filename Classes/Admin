@@ -26,9 +26,10 @@ class Admin extends User {
 
     }
     public function displayUsers(){
-        $stmt = $this->db->prepare("SELECT * FROM users WHERE role!=:role ");
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE role != :role and user_status != :status ");
         $stmt->execute([
-            ":role" => "admin"
+            ":role" => "admin",
+            ":status" => "pending"
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -39,6 +40,18 @@ class Admin extends User {
             ":id" => $id
         ]);
     }
+    public function getCoursesForAdmin(){
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , count(enr.userID) as students 
+                                    FROM courses c
+									JOIN category cat on c.categoryID = cat.categoryID
+									join users u on c.userID = u.userID
+									left join enrollement enr on enr.courseID = c.courseID
+                                    group by c.courseID;
+                                    ");
+$stmt->execute();
+return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
   
     
    

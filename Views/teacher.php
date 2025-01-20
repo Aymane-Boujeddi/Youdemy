@@ -11,9 +11,16 @@ if (isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
     $errors = $_SESSION['errors'];
     unset($_SESSION['errors']);
 }
-// if(!isset($_SESSION['id']) && $_SESSION['role'] != 'teacher'){
-// header("location: ../index.php");
-// }
+if(isset($_SESSION['id']) && $_SESSION['role'] == 'student'){
+    header("location: Views/student.php");
+    exit();
+}elseif(isset($_SESSION['id']) && $_SESSION['role'] == 'admin'){
+    header("location: Views/admin.php");
+    exit();
+}elseif(!isset($_SESSION['id'])){
+    header("location: ../index.php");
+    exit();
+}
 $category = new Category("");
 $tag = new Tags("");
 $categories = $category->displayGategories();
@@ -64,77 +71,84 @@ $courseCount = $teacher->courseCount($teacherID);
 
     <main class="dashboard-main">
         <section id="add-course" class="dashboard-section">
-            <h2><i class="fas fa-plus-circle"></i> Add New Course</h2>
-            <form id="newCourseForm" class="course-form" action="../Actions/addCourse.php" method="POST">
-                <?php foreach ($errors as $error) {
-                } ?>
+            <?php if ($_SESSION['status'] == 'active'): ?>
+                <h2><i class='fas fa-plus-circle'></i> Add New Course</h2>
+                <form id='newCourseForm' class='course-form' action='../Actions/addCourse.php' method='POST'>
+                    <?php foreach ($errors as $error): ?>
+                        <div class='error-alert'>
+                            <i class='fas fa-exclamation-circle'></i>
+                            <span><?php echo htmlspecialchars($error); ?></span>
+                        </div>
+                    <?php endforeach; ?>
 
-                <div class="form-group">
-                    <label for="courseTitle">Course Title</label>
-                    <input type="text" id="courseTitle" name="title">
-                    <input type="hidden" name="id" value=<?= '"' . $teacherID . '"' ?>>
-                </div>
-
-                <div class="form-group">
-                    <label for="courseDescription">Course Description</label>
-                    <textarea id="courseDescription" name="description" rows="4"></textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="courseCategory">Category</label>
-                        <select id="courseCategory" name="category">
-                            <option value="">Select a category</option>
-                            <?php foreach ($categories as $category): ?>
-                                <option value=<?= '"' . $category['categoryID'] . '"' ?>><?= $category['category_name'] ?></option>
-                            <?php endforeach ?>
-                        </select>
+                    <div class='form-group'>
+                        <label for='courseTitle'>Course Title</label>
+                        <input type='text' id='courseTitle' name='title'>
+                        <input type='hidden' name='id' value='<?= $teacherID ?>'>
                     </div>
-                    <div class="form-group">
-                        <label for="courseType">Course Type</label>
-                        <select id="courseType" name="type">
-                            <option value="">Select Type</option>
-                            <option value="video">Video Course</option>
-                            <option value="document">Document Based</option>
-                        </select>
+
+                    <div class='form-group'>
+                        <label for='courseDescription'>Course Description</label>
+                        <textarea id='courseDescription' name='description' rows='4'></textarea>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label>Course Tags</label>
-                    <div class="tags-wrapper">
-
-                        <div class="tags-container">
-                            <div class="tags-group">
-
-                                <div class="tags-list">
-                                    <?php foreach ($tags as $tag): ?>
-                                        <label class="tag">
-                                            <input type="checkbox" <?= 'name="tag[' . $tag["tagID"] . ']"' ?> value="<?= $tag['tagID'] ?>">
-                                            <span><?= $tag['tag_name'] ?></span>
-                                        </label>
-                                    <?php endforeach ?>
-
-                                </div>
-                            </div>
-
-
-
+                    <div class='form-row'>
+                        <div class='form-group'>
+                            <label for='courseCategory'>Category</label>
+                            <select id='courseCategory' name='category'>
+                                <option value=''>Select a category</option>
+                                <?php foreach ($categories as $category): ?>
+                                    <option value='<?= $category['categoryID'] ?>'><?= $category['category_name'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class='form-group'>
+                            <label for='courseType'>Course Type</label>
+                            <select id='courseType' name='type'>
+                                <option value=''>Select Type</option>
+                                <option value='video'>Video Course</option>
+                                <option value='document'>Document Based</option>
+                            </select>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="courseContent">Course Content</label>
-                    <div id="contentInput">
-                        <input id="contentvid" type="url" name="contentVideo" placeholder="Enter video URL" style="display: none;">
-                        <textarea id="contentdoc" name="contentText" rows="6" placeholder="Enter your course content here..." style="display: none;"></textarea>
+                    <div class='form-group'>
+                        <label>Course Tags</label>
+                        <div class='tags-wrapper'>
+                            <div class='tags-container'>
+                                <div class='tags-group'>
+                                    <div class='tags-list'>
+                                        <?php foreach ($tags as $tag): ?>
+                                            <label class='tag'>
+                                                <input type='checkbox' name='tag[<?= $tag['tag_name'] ?>]' value='<?= $tag['tagID'] ?>'>
+                                                <span><?= $tag['tag_name'] ?></span>
+                                            </label>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <button type="submit" class="submit-btn">Create Course</button>
-                <button type="submit" class="cancel-btn" onclick="this.form.reset()">Cancel</button>
-            </form>
+                    <div class='form-group'>
+                        <label for='courseContent'>Course Content</label>
+                        <div id='contentInput'>
+                            <input id='contentvid' type='url' name='contentVideo' placeholder='Enter video URL' style='display: none;'>
+                            <textarea id='contentdoc' name='contentText' rows='6' placeholder='Enter your course content here...' style='display: none;'></textarea>
+                        </div>
+                    </div>
+
+                    <button type='submit' class='submit-btn'>Create Course</button>
+                    <button type='submit' class='cancel-btn' onclick='this.form.reset()'>Cancel</button>
+                </form>
+            <?php else: ?>
+                <div class="inactive-alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Account Inactive</h3>
+                    <p>Your account is currently inactive. Please contact the administrator for assistance.</p>
+                </div>
+            <?php endif; ?>
+
         </section>
 
         <section id="manage-courses" class="dashboard-section" style="display: none;">
@@ -258,28 +272,21 @@ $courseCount = $teacher->courseCount($teacherID);
             }
         });
 
-        // Get all nav links and sections
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.dashboard-section');
 
-        // Function to set active section
         function setActive(sectionId) {
-            // Remove # from sectionId if present
             const targetId = sectionId.replace('#', '');
 
-            // Update active states
             navLinks.forEach(l => l.classList.remove('active'));
             sections.forEach(s => s.style.display = 'none');
 
-            // Set new active section and link
             document.getElementById(targetId).style.display = 'block';
             document.querySelector(`[onclick*="#${targetId}"]`).classList.add('active');
 
-            // Save to localStorage
             localStorage.setItem('activeTab', targetId);
         }
 
-        // On page load, get active tab from localStorage or default to first tab
         document.addEventListener('DOMContentLoaded', () => {
             const activeTab = localStorage.getItem('activeTab') || 'add-course';
             setActive(activeTab);

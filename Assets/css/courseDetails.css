@@ -1,0 +1,149 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #334155;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+.course-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.course-header {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+}
+
+.course-header h1 {
+    font-size: 2.5rem;
+    color: #1e293b;
+    margin-bottom: 16px;
+}
+
+.course-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.category {
+    background-color: #3b82f6;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.instructor {
+    color: #64748b;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.tag {
+    background-color: #f1f5f9;
+    color: #475569;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+.course-description,
+.course-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 24px;
+}
+
+.course-description h2,
+.course-content h2 {
+    color: #1e293b;
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+
+.course-description p {
+    color: #475569;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.text-content {
+    background-color: #f8fafc;
+    padding: 24px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.text-content p {
+    color: #475569;
+    font-size: 1rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+.type-tag {
+    background-color: #3b82f6;
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-weight: 500;
+}
+
+.type-tag i {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .course-container {
+        padding: 16px;
+        margin: 20px auto;
+    }
+
+    .course-header h1 {
+        font-size: 2rem;
+    }
+
+    .course-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+} 

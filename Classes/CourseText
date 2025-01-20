@@ -26,6 +26,10 @@ class CourseText extends Course
         $this->emptyInputCheck($this->description, "The description should not be empty");
         $this->emptyInputCheck($this->contentType, "Choose a type for the course");
         $this->emptyInputCheck($this->textContent, "The content is required");
+        if(empty($tagsID)){
+            array_push($this->errors, "Please add a tag to the course (required)");
+        }
+        
 
         if (empty($this->errors)) {
             $courseStmt = $this->db->prepare("INSERT INTO courses(userID,title,description,categoryID,content_type) values(:userID,:title,:description,:categoryID,:type)");
@@ -51,5 +55,18 @@ class CourseText extends Course
                 ]);
             }
         }
+    }
+    public function displayCourse($courseID){
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , ct.*
+                                    FROM courses c
+                                    left JOIN category cat on c.categoryID = cat.categoryID
+                                    left join users u on c.userID = u.userID
+                                    left join course_text ct ct.courseID = c.courseID
+                                    where c.courseID = :courseID
+                                    ");
+        $stmt->execute([
+            ":courseID" => $courseID
+        ]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

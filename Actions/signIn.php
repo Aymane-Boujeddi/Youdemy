@@ -12,8 +12,9 @@ session_start();
 $_SESSION['id'] = $userInfo['userID'];
 $_SESSION['role'] = $userInfo['role'];
 $_SESSION['username'] = $userInfo['username'];
+$_SESSION['status'] = $userInfo['user_status'];
 
-if($userInfo['role'] == "teacher"){
+if($userInfo['role'] == "teacher" && $userInfo['user_status'] != "pending"){
    
     header("location: ../Views/teacher.php");
     exit();
@@ -28,6 +29,9 @@ if($userInfo['role'] == "teacher"){
 }elseif(empty($userInfo)){
     $_SESSION['errors'] = $loginUser->getErrors();
     header("location: ../Views/login.php");
-}
-
+    exit();
+}elseif($userInfo['role'] == "teacher" && $userInfo['user_status'] == "pending")
+    $_SESSION['errors'] = ["Your account is not verified yet please wait for verification"];
+    header("location: ../Views/login.php");
+    exit();
 }
