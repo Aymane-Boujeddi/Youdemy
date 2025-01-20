@@ -44,7 +44,6 @@ $enrolledCourses = $student->enrolledCourses($_SESSION['id']);
                     <h1>Student Dashboard</h1>
                     <ul class="nav-links">
                         <li><a class="nav-link" onclick="setActive('#my-courses')"><i class="fas fa-graduation-cap"></i> My Courses</a></li>
-                        <li><a class="nav-link active" onclick="setActive('#course-catalog')"><i class="fas fa-book"></i> Course Catalog</a></li>
                         <li><a class="nav-link" onclick="setActive('#course-search')"><i class="fas fa-search"></i> Search Courses</a></li>
                         <li><a href="../Actions/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
@@ -72,23 +71,7 @@ $enrolledCourses = $student->enrolledCourses($_SESSION['id']);
             </div>
         </section>
 
-        <section id="course-search" class="dashboard-section" style="display: none;">
-            <h2><i class="fas fa-search"></i> Search Courses</h2>
-            <div class="search-container">
-                <div class="search-box">
-                    <input type="text" placeholder="Search courses...">
-                    <select>
-                        <option value="">All Categories</option>
-                        <option value="programming">Programming</option>
-                        <option value="design">Design</option>
-                        <option value="business">Business</option>
-                    </select>
-                    <button class="search-btn"><i class="fas fa-search"></i> Search</button>
-                </div>
-                <div class="search-results">
-                </div>
-            </div>
-        </section>
+        
 
         <section id="my-courses" class="dashboard-section">
             <h2><i class="fas fa-graduation-cap"></i> My Courses</h2>

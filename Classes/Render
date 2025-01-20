@@ -36,11 +36,75 @@ class Render {
                         return $userCard;
 
     }
-    public static function renderModificationForm($course,$courseTags,$categories,$tags){
-        $type = [
-            "video" => "Video",
-            "document" => "Document"
-        ];
+    public static function displayCourseVideo($teacher,$title,$description,$category,$tags,$content){
+        $course = "<div class='course-container'>
+        <div class='course-header'>
+            <h1>{$title}</h1>
+            <div class='course-meta'>
+                <span class='category'>{$category}</span>
+                <span class='instructor'><i class='fas fa-user'></i> {$teacher}</span>
+            </div>
+            <div class='tags'>";
+                  foreach($tags as $tag){
+                $course .= "<span class='tag'> " . $tag['tag_name'] . "</span>";
+               }
+           $course .= " </div>
+        </div>
+
+        <div class='course-description'>
+            <h2>Course Description</h2>
+            <p>Master advanced JavaScript concepts including ES6+, async programming, and design patterns. Perfect for developers looking to level up their JavaScript skills.</p>
+        </div>
+
+        <div class='course-content'>
+            <h2>Course Content</h2>
+            <div class='video-container'>
+                <iframe
+                    src='{$content}'
+                    frameborder='0'
+                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>";
+    return $course;
+
+        
+
+    }
+    public static function displayCourseText($teacher,$title,$description,$category,$tags,$content){
+        $course = "<div class='course-container'>
+        <div class='course-header'>
+            <h1>{$title}</h1>
+            <div class='course-meta'>
+                <span class='category'>{$category}</span>
+                <span class='instructor'><i class='fas fa-user'></i> {$teacher}</span>
+            </div>
+            <div class='tags'>
+                <span class='tag type-tag'><i class='fas fa-file-alt'></i> Document Course</span>";
+                
+                foreach($tags as $tag){
+                    $course .= "<span class='tag'>" . $tag['tag_name'] . "</span>";
+                   }
+           
+
+        $course .= "
+         </div>
+        </div>
+        <div class='course-description'>
+            <h2>Course Description</h2>
+            <p>{$description}</p>
+        </div>
+
+        <div class='course-content'>
+            <h2>Course Content</h2>
+            <div class='text-content'>
+                <p>{$content}</p>
+            </div>
+        </div>
+    </div>";
+    return $course;
 
         
 
