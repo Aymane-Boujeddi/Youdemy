@@ -57,16 +57,37 @@ class CourseText extends Course
         }
     }
     public function displayCourse($courseID){
-        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , ct.*
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , ct.* , c.courseID
                                     FROM courses c
-                                    left JOIN category cat on c.categoryID = cat.categoryID
-                                    left join users u on c.userID = u.userID
-                                    left join course_text ct ct.courseID = c.courseID
+                                     JOIN category cat on c.categoryID = cat.categoryID
+                                     join users u on c.userID = u.userID
+                                     join course_text ct on ct.courseID = c.courseID
                                     where c.courseID = :courseID
                                     ");
         $stmt->execute([
             ":courseID" => $courseID
         ]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function addCourseContent($courseID,$content){
+        $stmt = $this->db->prepare("INSERT INTO course_text(courseID,course_content) values(:courseID,:content)");
+        $stmt->execute([
+            ":courseID" => $courseID ,
+            ":content" => $content
+        ]);
+
+    }
+    public function deleteContent($courseID){
+        $stmt = $this->db->prepare("DELETE FROM course_text where courseID = :courseID");
+        $stmt->execute([
+            ":courseID" => $courseID
+        ]);
+    }
+    public function updateContent($courseID,$content){
+        $stmt = $this->db->prepare("UPDATE course_text SET course_content=:content where courseID = :courseID");
+        $stmt->execute([
+            ":content" => $content ,
+            ":courseID" => $courseID
+        ]);
     }
 }

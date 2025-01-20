@@ -6,6 +6,7 @@
             <div class="auth-buttons">
                <a href="Views/login.php"><button class="sign-in-btn" >Sign In</button></a> 
                <a href="Views/register.php"><button class="sign-up-btn" >Sign Up</button></a> 
+               <a href="Views/search.php"><button class="sign-up-btn" >Search</button></a> 
             </div>
         </nav>
 

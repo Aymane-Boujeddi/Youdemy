@@ -3,12 +3,12 @@ require_once "User";
 class Teacher extends User {
 
     public function displayCourses($teacherID){
-        $stmt = $this->db->prepare("SELECT c.* , vid.* , doc.* , cat.*
+        $stmt = $this->db->prepare("SELECT  vid.* , doc.* , cat.* , c.*  
                                     FROM courses c
 									LEFT JOIN course_video vid on c.courseID = vid.courseID
                                     LEFT JOIN course_text doc on c.courseID = doc.courseID 
-                                    left JOIN category cat on c.categoryID = cat.categoryID;
-                                    WHERE userID = :id");
+                                    left JOIN category cat on c.categoryID = cat.categoryID
+                                    WHERE c.userID = :id");
         $stmt->execute([
             ":id" => $teacherID
         ]);

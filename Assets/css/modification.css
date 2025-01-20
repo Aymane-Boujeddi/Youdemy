@@ -1,393 +1,258 @@
+/* Base styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f8fafc;
-    color: #334155;
-    margin: 0;
-    padding: 0;
-}
-
-header {
-    width: 100%;
-    background: linear-gradient(to right, #1e293b, #334155);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.nav-content {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 1.25rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.nav-content h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #f8fafc;
-    letter-spacing: -0.5px;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-}
-
-.nav-btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-}
-
-.login-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #f8fafc;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.login-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
-}
-
-.register-btn {
-    background: #3b82f6;
-    color: white;
-    box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
-}
-
-.register-btn:hover {
-    background: #2563eb;
-    transform: translateY(-1px);
-}
-
-.hero {
-    padding: 6rem 2rem;
-    text-align: center;
-    background: linear-gradient(rgba(30, 41, 59, 0.95), rgba(30, 41, 59, 0.95));
-    color: white;
-}
-
-.hero-content {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.hero-content h2 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
-}
-
-.hero-content p {
-    font-size: 1.25rem;
-    color: #cbd5e1;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     line-height: 1.6;
-}
-
-.courses-section {
-    max-width: 1280px;
-    margin: 5rem auto;
-    padding: 0 2rem;
-}
-
-.section-header {
-    text-align: center;
-    margin-bottom: 4rem;
-}
-
-.section-header h2 {
-    font-size: 2.5rem;
+    background-color: #f8fafc;
     color: #1e293b;
-    margin-bottom: 1rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-}
-
-.section-header p {
-    color: #64748b;
-    font-size: 1.1rem;
-}
-
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2rem;
     padding: 2rem;
 }
 
-.course-card {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-}
-
-.course-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-}
-
-.course-info {
-    padding: 1.5rem;
-}
-
-.course-info h2 {
-    font-size: 1.3rem;
-    margin-bottom: 0.8rem;
-    color: #1e293b;
-    font-weight: 600;
-}
-
-.category {
-    display: inline-block;
-    background-color: #3b82f6;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    margin-bottom: 0.8rem;
-    font-weight: 500;
-}
-
-.tags {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 0.5rem;
-}
-
-.tags span {
-    background-color: #f1f5f9;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: #475569;
-}
-
-.instructor {
-    color: #64748b;
-    font-size: 0.9rem;
-    margin-bottom: 0.5rem;
-}
-
-.description {
-    font-size: 0.9rem;
-    color: #64748b;
-    line-height: 1.6;
-}
-
-footer {
-    background: linear-gradient(to right, #1e293b, #334155);
-    color: #f8fafc;
-    padding: 5rem 2rem 2rem;
-}
-
-.footer-content {
-    max-width: 1280px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 3rem;
-    margin-bottom: 3rem;
-}
-
-.footer-section h3 {
-    margin-bottom: 1.25rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.footer-section ul {
-    list-style: none;
-}
-
-.footer-section ul li {
-    margin-bottom: 0.75rem;
-}
-
-.footer-section a {
-    color: #cbd5e1;
-    text-decoration: none;
-    transition: color 0.2s ease;
-}
-
-.footer-section a:hover {
-    color: #f8fafc;
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: #cbd5e1;
-}
-
-@media (max-width: 768px) {
-    .nav-content {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-    }
-
-    .hero {
-        padding: 4rem 1rem;
-    }
-
-    .hero-content h2 {
-        font-size: 2.25rem;
-    }
-
-    .courses-section {
-        padding: 0 1rem;
-        margin: 3rem auto;
-    }
-
-    .section-header h2 {
-        font-size: 2rem;
-    }
-
-    .card-actions {
-        flex-direction: column;
-    }
-
-    .features {
-        padding: 3rem 1rem;
-    }
-}
-
-.dashboard-section {
+/* Form Container */
+.modification-form {
     max-width: 800px;
     margin: 50px auto;
-    padding: 20px;
+    padding: 2rem;
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+/* Form Header */
+.modification-form h2 {
     font-size: 1.75rem;
     color: #1e293b;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
 }
 
+/* Form Layout */
 .course-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 1.5rem;
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-}
-
-.form-group label {
-    font-weight: 500;
-    color: #475569;
-}
-
-.form-group input[type="text"],
-.form-group input[type="url"],
-.form-group textarea,
-.form-group select {
-    padding: 10px;
-    border: 1px solid #cbd5e1;
-    border-radius: 4px;
-    font-size: 1rem;
-    color: #334155;
-    background-color: #f1f5f9;
-    transition: border-color 0.2s ease;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    border-color: #3b82f6;
-    outline: none;
+    gap: 0.5rem;
 }
 
 .form-row {
-    display: flex;
-    gap: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
 }
 
-.tags-wrapper {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+/* Labels and Inputs */
+label {
+    font-weight: 500;
+    color: #2c3e50;
 }
 
-.tag {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    background-color: #e2e8f0;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    color: #334155;
+input, select, textarea {
+    padding: 0.8rem;
+    border: 2px solid #e9ecef;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
 }
 
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Form Actions */
 .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 2rem;
 }
 
 .submit-btn,
 .cancel-btn {
-    padding: 10px 20px;
+    padding: 0.75rem 1.5rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-weight: 500;
+    font-size: 0.95rem;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .submit-btn {
-    background-color: #3b82f6;
+    background-color: #3498db;
     color: white;
 }
 
 .submit-btn:hover {
-    background-color: #2563eb;
+    background-color: #2980b9;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cancel-btn {
-    background-color: #e2e8f0;
-    color: #334155;
+    background-color: #f1f5f9;
+    color: #475569;
 }
 
 .cancel-btn:hover {
-    background-color: #cbd5e1;
+    background-color: #e2e8f0;
+    transform: translateY(-1px);
 }
 
+/* Error Messages */
 .error-message {
-    color: #e11d48;
+    color: #ef4444;
     font-size: 0.875rem;
-    margin-bottom: 10px;
-} 
+    margin-top: 0.5rem;
+}
+
+/* Upload Content Styles */
+.content-upload {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.upload-box {
+    border: 2px dashed #e9ecef;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: #3498db;
+    background-color: #f8f9fa;
+}
+
+.upload-box i {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+}
+
+.upload-box input[type="file"] {
+    display: none;
+}
+
+/* Tags Styling */
+.tags-wrapper {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+}
+
+.tags-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.tags-search input {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 200px;
+}
+
+.selected-count {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.tags-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.tags-group {
+    margin-bottom: 1.5rem;
+}
+
+.tags-group h4 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.tags-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tag input[type="checkbox"] {
+    display: none;
+}
+
+.tag span {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.tag input[type="checkbox"]:checked + span {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+/* Scrollbar styling */
+.tags-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tags-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.tags-container::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modification-form {
+        margin: 2rem;
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+    }
+}

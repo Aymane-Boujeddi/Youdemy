@@ -17,10 +17,10 @@
     require_once "../Classes/Tags";
     session_start();
     if (isset($_SESSION['id']) && $_SESSION['role'] == 'student') {
-        header("location: Views/student.php");
+        header("location: ./student.php");
         exit();
     } elseif (isset($_SESSION['id']) && $_SESSION['role'] == 'teacher') {
-        header("location: Views/teacher.php");
+        header("location: ./teacher.php");
         exit();
     } elseif (!isset($_SESSION['id'])) {
         header("location: ../index.php");

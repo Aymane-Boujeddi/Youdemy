@@ -55,7 +55,7 @@ class CourseVideo extends Course
         }
     }
     public function displayCourse($courseID){
-        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , cv.*
+        $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , cv.* , c.courseID
                                     FROM courses c
                                     left JOIN category cat on c.categoryID = cat.categoryID
                                     left join users u on c.userID = u.userID
@@ -65,7 +65,28 @@ class CourseVideo extends Course
         $stmt->execute([
             ":courseID" => $courseID
         ]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function addCourseContent($courseID,$content){
+        $stmt = $this->db->prepare("INSERT INTO course_video(courseID,course_content) values(:courseID,:content)");
+        $stmt->execute([
+            ":courseID" => $courseID ,
+            ":content" => $content
+        ]);
+
+    }
+    public function deleteContent($courseID){
+        $stmt = $this->db->prepare("DELETE FROM course_video where courseID = :courseID");
+        $stmt->execute([
+            ":courseID" => $courseID
+        ]);
+    }
+    public function updateContent($courseID,$content){
+        $stmt = $this->db->prepare("UPDATE course_video SET course_content=:content where courseID = :courseID");
+        $stmt->execute([
+            ":content" => $content ,
+            ":courseID" => $courseID
+        ]);
     }
       
 }

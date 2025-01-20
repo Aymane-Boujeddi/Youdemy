@@ -36,4 +36,13 @@ class Render {
                         return $userCard;
 
     }
+    public static function renderModificationForm($course,$courseTags,$categories,$tags){
+        $type = [
+            "video" => "Video",
+            "document" => "Document"
+        ];
+
+        
+
+    }
 }
