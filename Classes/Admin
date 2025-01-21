@@ -1,8 +1,10 @@
 <?php
 require_once "User";
-class Admin extends User {
+class Admin extends User
+{
 
-    public function displayPendingTeacher(){
+    public function displayPendingTeacher()
+    {
         $stmt = $this->db->prepare("SELECT * FROM users WHERE role=:role and user_status=:status");
         $stmt->execute([
             ":role" => "teacher",
@@ -10,22 +12,23 @@ class Admin extends User {
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function validateTeacher($id){
+    public function validateTeacher($id)
+    {
         $stmt = $this->db->prepare("UPDATE users SET user_status=:status where userID=:id");
         $stmt->execute([
             ":status" => "active",
             ":id" => $id
         ]);
-
     }
-    public function removeUser($id){
+    public function removeUser($id)
+    {
         $stmt = $this->db->prepare("DELETE FROM users WHERE userID=:id");
         $stmt->execute([
             ":id" => $id
         ]);
-
     }
-    public function displayUsers(){
+    public function displayUsers()
+    {
         $stmt = $this->db->prepare("SELECT * FROM users WHERE role != :role and user_status != :status ");
         $stmt->execute([
             ":role" => "admin",
@@ -33,14 +36,16 @@ class Admin extends User {
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function changeStatus($status,$id){
+    public function changeStatus($status, $id)
+    {
         $stmt = $this->db->prepare("UPDATE users SET user_status=:status WHERE userID=:id");
         $stmt->execute([
             ":status" => $status,
             ":id" => $id
         ]);
     }
-    public function getCoursesForAdmin(){
+    public function getCoursesForAdmin()
+    {
         $stmt = $this->db->prepare("SELECT c.* , cat.category_name , u.username as username , count(enr.userID) as students 
                                     FROM courses c
 									JOIN category cat on c.categoryID = cat.categoryID
@@ -48,13 +53,79 @@ class Admin extends User {
 									left join enrollement enr on enr.courseID = c.courseID
                                     group by c.courseID;
                                     ");
-$stmt->execute();
-return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
-  
-    
-   
-  
+    public function numberOfCourses()
+    {
+        $stmt = $this->db->prepare("SELECT count(courseID) as total_courses
+                                    FROM courses 
+                                    ");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function numberOfStudents()
+    {
+        $stmt = $this->db->prepare("SELECT count(userID) as total_students
+                                    FROM users 
+                                    where role = 'student'
+                                    ");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function numberOfTeachers()
+    {
+        $stmt = $this->db->prepare("SELECT count(userID) as total_teachers
+                                    FROM users 
+                                    where role = 'teacher'
+                                    ");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function numberOfenrollements()
+    {
+        $stmt = $this->db->prepare("SELECT count(userID) as total_enroll
+                                    FROM enrollement
+                                    
+                                    ");
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function coursesByCategory(){
+        $stmt = $this->db->prepare("SELECT count(cat.categoryID) as category , cat.category_name
+                                    FROM category cat
+                                    JOIN courses c on cat.categoryID = c.categoryID
+                                    group by cat.categoryID
+                                    
+                                    ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+    public function popularCourses(){
+        $stmt = $this->db->prepare("SELECT count(enr.userID) as students , c.title , u.username
+                                    FROM courses c
+                                    JOIN enrollement enr on enr.courseID = c.courseID 
+                                    join users u on c.userID = u.userID
+                                    group by c.courseID
+                                    limit 3;
+                                    
+                                    ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+    public function popularTeachers(){
+        $stmt = $this->db->prepare("SELECT count(c.courseID) as total_courses , u.username 
+                                    FROM users u
+                                    join courses c on c.userID = u.userID
+                                    group by u.userID 
+                                    limit 3
+                                    
+                                    ");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+    }
 
 }

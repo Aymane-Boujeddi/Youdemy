@@ -13,7 +13,7 @@ class Student extends User {
     }
 
     public function enrolledCourses($studentID){
-        $stmt = $this->db->prepare("SELECT us.username as student , u.username as teacher , c.title , c.description , cat.category_name , c.creation_date 
+        $stmt = $this->db->prepare("SELECT us.username as student , u.username as teacher , c.title , c.description , cat.category_name , c.creation_date , c.courseID
                                     FROM enrollement enr
                                     join courses c on c.courseID = enr.courseID
                                     join category cat on c.categoryID = cat.categoryID

@@ -1,8 +1,10 @@
 <?php
 require_once "User";
-class Teacher extends User {
+class Teacher extends User
+{
 
-    public function displayCourses($teacherID){
+    public function displayCourses($teacherID)
+    {
         $stmt = $this->db->prepare("SELECT   cat.* , c.*  , count(enr.userID) as students
                                     FROM courses c
                                     JOIN category cat on c.categoryID = cat.categoryID
@@ -15,30 +17,47 @@ class Teacher extends User {
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function courseCount($teacherID){
+    public function courseCount($teacherID)
+    {
         $stmt = $this->db->prepare("SELECT count(courseID) as course_count FROM courses WHERE userID = :id");
         $stmt->execute([
             ":id" => $teacherID
         ]);
-       return $stmt->fetch();
+        return $stmt->fetch();
     }
-    public function courseOwner($teacherID,$courseID){
+    public function courseOwner($teacherID, $courseID)
+    {
         $stmt = $this->db->prepare("SELECT * 
                                     FROM courses c 
                                     JOIN users u on u.courseID = c.courseID
                                     where c.userID = :userID and c.courseID = :courseID
                                     ");
         $stmt->execute([
-            ":userID" => $teacherID , 
+            ":userID" => $teacherID,
             ":courseID" => $courseID
         ]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-    public function removeCourseEnrollement($enrollementID){
+    public function removeCourseEnrollement($enrollementID)
+    {
         $stmt = $this->db->prepare("DELETE FROM enrollement where enrollementID = :enrollementID");
         $stmt->execute([
             ":enrollementID" => $enrollementID
         ]);
     }
-    
+    public function totalStudents($teacherID)
+    {
+        $stmt = $this->db->prepare("SELECT count(enr.userID) as students
+                                    FROM enrollement enr
+                                    join courses c on c.courseID = enr.courseID
+                                    join users u on u.userID = c.userID
+                                    where u.userID = :userID
+                                    
+        ");
+        $stmt->execute([
+            ":userID" => $teacherID
+            
+        ]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }

@@ -16,9 +16,7 @@
     $enrollError = "";
     if (isset($_SESSION['id'])) {
         require_once "userHeader.php";
-        // $button = "<a href='../Action/enrollCourse.php?courseID=" . $courseID . "&userID=" . $teacherID .  "'><button class='enroll-button'>Enroll Now</button></a>";
     } else {
-        // $button = "<a href='register.php'><button class='sign-up-now'>Sign Up Now</button></a>";
         require_once "header.php";
     }
     if (isset($_SESSION['enroll_errors'])) {

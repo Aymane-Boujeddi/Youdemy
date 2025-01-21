@@ -26,11 +26,13 @@ $category = new Category("");
 $tag = new Tags("");
 $categories = $category->displayGategories();
 $tags = $tag->displayTags();
-$teacher = new teacher("", "", "", "", "");
+$teacher = new Teacher("", "", "", "", "");
 $courses = $teacher->displayCourses($teacherID);
 $courseCount = $teacher->courseCount($teacherID);
 $courseInstance = new Course("", "", "", "", "", "");
 $enrollements = $courseInstance->enrollements($teacherID);
+$students = $teacher->totalStudents($teacherID);
+
 
 
 
@@ -75,7 +77,7 @@ $enrollements = $courseInstance->enrollements($teacherID);
     </header>
 
     <main class="dashboard-main">
-        <section id="add-course" class="dashboard-section" style="display: none;">
+        <section id="add-course" class="dashboard-section">
             <?php if ($_SESSION['status'] == 'active'): ?>
                 <h2><i class='fas fa-plus-circle'></i> Add New Course</h2>
                 <form id='newCourseForm' class='course-form' action='../Actions/addCourse.php' method='POST'>
@@ -156,13 +158,13 @@ $enrollements = $courseInstance->enrollements($teacherID);
 
         </section>
 
-        <section id="manage-courses" class="dashboard-section">
+        <section id="manage-courses" class="dashboard-section" style="display: none;">
             <h2><i class="fas fa-tasks"></i> Manage Courses</h2>
             <div class="table-container">
-                <div class="table-header">
-                    <input type="text" id="courseSearch" placeholder="Search courses...">
-                </div>
+
                 <table class="courses-table">
+
+
                     <thead>
                         <tr>
                             <th>Course Title</th>
@@ -173,23 +175,29 @@ $enrollements = $courseInstance->enrollements($teacherID);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($courses as $course): ?>
 
+                        <?php foreach ($courses as $course): ?>
                             <tr>
                                 <td><?= $course['title'] ?></td>
                                 <td><?= $course['category_name'] ?></td>
                                 <td><?= $course['content_type'] ?></td>
                                 <td><?= $course['students'] ?></td>
                                 <td class="action-buttons">
-                                    <a href="courseDetails.php?ID=<?= $course['courseID'] ?>"><button class="view-btn" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button> </a>
-                                    <a href="./modification.php?courseID=<?= $course['courseID'] ?>"><button class="edit-btn" title="Edit Course">
-                                            <i class="fas fa-edit"></i>
-                                        </button></a>
-                                    <a href="../Actions/deleteCourse.php?courseID=<?= $course['courseID'] ?>"><button class="delete-btn" title="Delete Course">
-                                            <i class="fas fa-trash"></i>
-                                        </button></a>
+                                    <?php if ($_SESSION['status'] == 'active'): ?>
+
+                                        <a href="courseDetails.php?ID=<?= $course['courseID'] ?>"><button class="view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button> </a>
+                                        <a href="./modification.php?courseID=<?= $course['courseID'] ?>"><button class="edit-btn" title="Edit Course">
+                                                <i class="fas fa-edit"></i>
+                                            </button></a>
+                                        <a href="../Actions/deleteCourse.php?courseID=<?= $course['courseID'] ?>"><button class="delete-btn" title="Delete Course">
+                                                <i class="fas fa-trash"></i>
+                                            </button></a>
+                                    <?php else: ?>
+
+                                        <p><i class="fas fa-exclamation-triangle"></i>Your account is currently inactive</p>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
@@ -213,27 +221,20 @@ $enrollements = $courseInstance->enrollements($teacherID);
                     <i class="fas fa-users"></i>
                     <div class="stat-info">
                         <h3>Total Students</h3>
-                        <p id="totalStudents">0</p>
+                        <p id="totalStudents"><?= $students['students'] ?></p>
                     </div>
                 </div>
 
 
-                <div class="stat-card">
-                    <i class="fas fa-certificate"></i>
-                    <div class="stat-info">
-                        <h3>Course Completions</h3>
-                        <p id="courseCompletions">0</p>
-                    </div>
-                </div>
+               
             </div>
 
 
         </section>
 
-        <section id="enrollments" class="dashboard-section" style="display: none;">
+        <section id="enrollments" class="dashboard-section">
             <h2><i class="fas fa-user-graduate"></i> Course Enrollments</h2>
             <div class="table-container">
-
                 <table class="enrollments-table">
                     <thead>
                         <tr>
@@ -241,7 +242,6 @@ $enrollements = $courseInstance->enrollements($teacherID);
                             <th>Course</th>
                             <th>Enrollment Date</th>
                             <th>Actions</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -255,56 +255,76 @@ $enrollements = $courseInstance->enrollements($teacherID);
                                 <td><?= $enrollement['title'] ?></td>
                                 <td><?= $enrollement['enrollement_date'] ?></td>
                                 <td class="action-buttons">
-                                    <a href="../Actions/removeEnrollement.php?ID=<?= $enrollement['enrollementID'] ?>"><button class="delete-btn" title="Delete Course">
+                                    <a href="../Actions/removeEnrollement.php?ID=<?= $enrollement['enrollementID'] ?>">
+                                        <button class="delete-btn" title="Delete Course">
                                             <i class="fas fa-trash"></i>
-                                        </button></a>
+                                        </button>
+                                    </a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
-
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
     <script>
-        const courseType = document.getElementById('courseType')
-        const contentInput = document.getElementById('contentInput')
-        const vidContent = document.getElementById('contentvid')
-        const docContent = document.getElementById('contentdoc')
+        const courseType = document.getElementById('courseType');
+        const contentInput = document.getElementById('contentInput');
+        const vidContent = document.getElementById('contentvid');
+        const docContent = document.getElementById('contentdoc');
 
-        courseType.addEventListener('change', function() {
-            if (this.value === 'video') {
-                docContent.style.display = 'none'
-                vidContent.style.display = 'block'
-            } else if (this.value === 'document') {
-                docContent.style.display = 'block'
-                vidContent.style.display = 'none'
-            } else {
-                docContent.style.display = 'none'
-                vidContent.style.display = 'none'
-            }
-        });
+        if (courseType) {
+            courseType.addEventListener('change', function() {
+                if (this.value === 'video') {
+                    docContent.style.display = 'none';
+                    vidContent.style.display = 'block';
+                } else if (this.value === 'document') {
+                    docContent.style.display = 'block';
+                    vidContent.style.display = 'none';
+                } else {
+                    docContent.style.display = 'none';
+                    vidContent.style.display = 'none';
+                }
+            });
+        }
 
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.dashboard-section');
 
         function setActive(sectionId) {
-            const targetId = sectionId.replace('#', '');
+            try {
+                const targetId = sectionId.replace('#', '');
 
-            navLinks.forEach(l => l.classList.remove('active'));
-            sections.forEach(s => s.style.display = 'none');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
 
-            document.getElementById(targetId).style.display = 'block';
-            document.querySelector(`[onclick*="#${targetId}"]`).classList.add('active');
+                sections.forEach(section => {
+                    section.style.display = 'none';
+                });
 
-            localStorage.setItem('activeTab', targetId);
+                const targetSection = document.getElementById(targetId);
+                const activeLink = document.querySelector(`[onclick*="#${targetId}"]`);
+
+                if (targetSection && activeLink) {
+                    targetSection.style.display = 'block';
+                    activeLink.classList.add('active');
+                    localStorage.setItem('activeTab', targetId);
+                }
+            } catch (error) {
+                console.error('Error in setActive:', error);
+            }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const activeTab = localStorage.getItem('activeTab') || 'add-course';
-            setActive(activeTab);
-        });
+        window.onload = function() {
+            try {
+                const activeTab = localStorage.getItem('activeTab') || 'add-course';
+                setActive(`#${activeTab}`);
+            } catch (error) {
+                console.error('Error in window.onload:', error);
+            }
+        }
     </script>
 </body>
 

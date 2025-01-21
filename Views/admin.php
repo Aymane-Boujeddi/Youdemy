@@ -34,6 +34,14 @@
     $tagInstance = new Tags("");
     $tags = $tagInstance->displayTags();
     $courses = $adminInstance->getCoursesForAdmin();
+    $numberOfCourses = $adminInstance->numberOfCourses();
+    $numberOfStudents = $adminInstance->numberOfStudents();
+    $numberOfTeachers = $adminInstance->numberOfTeachers();
+    $numberOfEnrollements = $adminInstance->numberOfenrollements();
+    $popularCourses = $adminInstance->popularCourses();
+    $topTeachers = $adminInstance->popularTeachers();
+    $topCategories = $adminInstance->coursesByCategory();
+    
 
     ?>
     <header>
@@ -165,9 +173,15 @@
                                 <td><?= $course['category_name'] ?></td>
                                 <td><?= $course['students'] ?></td>
                                 <td class="actions">
-                                    <button class="view-btn"><i class="fas fa-eye"></i></button>
-                                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="delete-btn"><i class="fas fa-trash"></i></button>
+                                <a href="courseDetails.php?ID=<?= $course['courseID'] ?>"><button class="view-btn" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button> </a>
+                                        <a href="./modification.php?courseID=<?= $course['courseID'] ?>"><button class="edit-btn" title="Edit Course">
+                                                <i class="fas fa-edit"></i>
+                                            </button></a>
+                                        <a href="../Actions/deleteCourse.php?courseID=<?= $course['courseID'] ?>"><button class="delete-btn" title="Delete Course">
+                                                <i class="fas fa-trash"></i>
+                                            </button></a>
                                 </td>
                             </tr>
                         </tbody>
@@ -352,28 +366,28 @@
                     <i class="fas fa-book"></i>
                     <div class="stat-info">
                         <h3>Total Courses</h3>
-                        <p>456</p>
+                        <p><?=$numberOfCourses['total_courses']?></p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-users"></i>
                     <div class="stat-info">
                         <h3>Total Students</h3>
-                        <p>1,234</p>
+                        <p><?=$numberOfStudents['total_students']?></p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <div class="stat-info">
                         <h3>Total Teachers</h3>
-                        <p>89</p>
+                        <p><?=$numberOfTeachers['total_teachers']?></p>
                     </div>
                 </div>
                 <div class="stat-card">
                     <i class="fas fa-graduation-cap"></i>
                     <div class="stat-info">
-                        <h3>Course Completions</h3>
-                        <p>789</p>
+                        <h3>Course Enrollements</h3>
+                        <p><?=$numberOfEnrollements['total_enroll']?></p>
                     </div>
                 </div>
             </div>
@@ -382,24 +396,37 @@
                 <div class="stat-panel">
                     <h3>Course Distribution by Category</h3>
                     <div class="chart-container">
-                        <canvas id="categoryChart"></canvas>
+                        <?php foreach($topCategories as $category): ?>
+                            <div class="category-item">
+                                <div class="category-info">
+                                    <span class="category-name"><?=$category['category_name']?></span>
+                                    <span class="category-count"><?=$category['category']?> courses</span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+
+
                     </div>
                 </div>
 
                 <div class="stat-panel">
                     <h3>Most Popular Courses</h3>
                     <div class="ranking-list">
+                        <?php $number = 0;
+                        foreach($popularCourses as $course):?>
                         <div class="ranking-item">
                             <div class="ranking-info">
-                                <span class="rank">1</span>
+                                <span class="rank"><?=$number+=1?></span>
                                 <div class="course-info">
-                                    <h4>Complete Web Development</h4>
-                                    <p>John Doe</p>
+                                    <h4><?=$course['title']?></h4>
+                                    <p><?=$course['username']?></p>
                                 </div>
                             </div>
-                            <span class="stat-number">1,234 students</span>
+                            <span class="stat-number"><?=$course['students'] . " students"?> </span>
                         </div>
-                        <div class="ranking-item">
+                        <?php endforeach;?>
+
+                        <!-- <div class="ranking-item">
                             <div class="ranking-info">
                                 <span class="rank">2</span>
                                 <div class="course-info">
@@ -418,24 +445,28 @@
                                 </div>
                             </div>
                             <span class="stat-number">756 students</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
                 <div class="stat-panel">
                     <h3>Top 3 Teachers</h3>
                     <div class="ranking-list">
+                        <?php $number = 0;
+                        foreach($topTeachers as $teacher):
+                            ?>
                         <div class="ranking-item">
                             <div class="ranking-info">
-                                <span class="rank">1</span>
+                                <span class="rank"><?=$number+=1?></span>
                                 <div class="teacher-info">
-                                    <h4>John Doe</h4>
-                                    <p>Web Development</p>
+                                    <h4><?=$teacher['username']?></h4>
+                                   
                                 </div>
                             </div>
-                            <span class="stat-number">45 courses</span>
+                            <span class="stat-number"><?=$teacher['total_courses'] . " courses"?></span>
                         </div>
-                        <div class="ranking-item">
+                        <?php endforeach;?>
+                        <!-- <div class="ranking-item">
                             <div class="ranking-info">
                                 <span class="rank">2</span>
                                 <div class="teacher-info">
@@ -454,7 +485,7 @@
                                 </div>
                             </div>
                             <span class="stat-number">32 courses</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

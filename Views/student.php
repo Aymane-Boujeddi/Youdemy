@@ -44,7 +44,7 @@ $enrolledCourses = $student->enrolledCourses($_SESSION['id']);
                     <h1>Student Dashboard</h1>
                     <ul class="nav-links">
                         <li><a class="nav-link" onclick="setActive('#my-courses')"><i class="fas fa-graduation-cap"></i> My Courses</a></li>
-                        <li><a class="nav-link" onclick="setActive('#course-search')"><i class="fas fa-search"></i> Search Courses</a></li>
+                        <li><a class="nav-link" href="../index.php"><i class="fas fa-home"></i> Home</a></li>
                         <li><a href="../Actions/logout.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                     <div class="user-info">
@@ -84,12 +84,9 @@ $enrolledCourses = $student->enrolledCourses($_SESSION['id']);
                         </div>
                         <div class="course-info">
                             <p class="instructor"><i class="fas fa-user"></i><?= $course['teacher'] ?></p>
-                            <p class="progress">Progress: 60%</p>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 60%"></div>
-                            </div>
+                            
                         </div>
-                        <button class="continue-btn">Continue Learning</button>
+                        <a href="../Views/courseDetails.php?ID=<?=$course['courseID']?>"><button class="continue-btn">Continue Learning</button></a>
                     </div>
                 <?php endforeach ?>
             </div>
